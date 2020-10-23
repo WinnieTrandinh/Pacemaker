@@ -5,3 +5,4 @@ slprj/
 *.elf
 *.hex
 *.autosave
+*.original
