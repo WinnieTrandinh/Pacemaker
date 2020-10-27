@@ -6,14 +6,32 @@
 
 import tkinter as tk
 
+class User: 
+    def __init__(self, name, password):
+        self.name = name
+        self.password = password
+
+    def change_name(self, new_name):
+        self.name = new_name
+
+user_list = []
+
 with open("pacemaker_users.txt") as i:
-    user_list = i.readlines()
-    user_list = [x.strip() for x in user_list]
+    names = i.readlines()
+    names = [x.strip() for x in names]
 
 with open("pacemaker_passwords.txt") as i:
     password_list = i.readlines()
     password_list = [x.strip() for x in password_list]
 
+<<<<<<< Updated upstream
+=======
+for i in range(len(names)):
+    user_list.append(User(names[i], password_list[i]))
+
+for i in range(len(user_list)):
+    print(user_list[i].name + "   " + user_list[i].password)
+>>>>>>> Stashed changes
 # *****************************************  new classes ***************************************************
 # parent class of all gComp (graphical component) classes, excluding the label
 # also happens to be a button
@@ -125,7 +143,11 @@ def chooseDisplay(username, password):
 
     
     for i in range(len(user_list)):  #loops through all names within the user list 
+<<<<<<< Updated upstream
         if(username == user_list[i] and password == password_list[i]):
+=======
+        if(username == user_list[i].name and password == user_list[i].password):
+>>>>>>> Stashed changes
 
             # ************************************************* window demo ***************************************************************
             #chooseDispWindow = tk.Toplevel(root,  height = HEIGHT, width = WIDTH, bg = '#FFB6C1')
@@ -145,9 +167,13 @@ def chooseDisplay(username, password):
             dataButton.place(250, 350, 300, 50)
             # ***************************************************************************************************************************************************
 
+<<<<<<< Updated upstream
         elif(username == user_list[i] and password != password_list[i]):
+=======
+        elif(username == user_list[i].name and password != user_list[i].password):
+>>>>>>> Stashed changes
             incorrectPassLabel = tk.Label(root, text = "Incorrect Password!", bg = '#FFB6C1', font = ("Comic Sans MS", 20)).place(x = 150, y = 550, width = 500, height = 50)
-        elif(username != user_list[i]):
+        elif(username != user_list[i].name):
             noUserLabel = tk.Label(root, text = "User not found!", bg = '#FFB6C1', font = ("Comic Sans MS", 20)).place(x = 150, y = 550, width = 500, height = 50)
 
 def lowerRate():
@@ -349,8 +375,7 @@ def signup2(signupWindow, name, password, confirmPassword):
         incorrectPassLabel = tk.Label(signupWindow, text = "Not The Same Password!", font = ("Comic Sans MS", 20)).place(x = 150, y = 550, width = 500, height = 50)
         
     else: 
-        password_list.append(confirmPassword.get())
-        user_list.append(name.get())
+        user_list.append(User(name.get(), confirmPassword.get()))
         f = open("pacemaker_users.txt", "a")
         f.write(name.get() + "\n")
         f.close
@@ -374,7 +399,3 @@ root.mainloop()
 
 
 # In[ ]:
-
-
-
-
