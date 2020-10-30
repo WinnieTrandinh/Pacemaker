@@ -13,8 +13,8 @@ class User:
         self.password = password
         self.AOO = [1000, 1000, 10]
         self.VOO = [1000, 1000, 10]
-        self.AII = [1000, 1000, 10, 400, 300, 3.5]
-        self.VII = [1000, 1000, 10, 400, 300, 3.5]
+        self.AII = [1000, 1000, 10, 400, 300, 3500]
+        self.VII = [1000, 1000, 10, 400, 300, 3500]
 
     def change_name(self, new_name):
         self.name = new_name
@@ -453,10 +453,10 @@ def aSensitivity(mode):
     aSensitivityEntry.place(x = 150, y = 350, width = 500, height = 50)
 
     userASensitivityLabel = tk.Label(aSensitivityWindow,text="Atrium Sensitivity: " + str(user_list[user_id].AII[5]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=200,y=220)
-    aSensitivityLabel = tk.Label(aSensitivityWindow,text="Range: 3-5", bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=200,y=260)
+    aSensitivityLabel = tk.Label(aSensitivityWindow,text="Range: 3000-5000 mV", bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=200,y=260)
 
 
-    enterButton10 = tk.Button(aSensitivityWindow, text="Enter", font=("Comic Sans MS", 15), command= lambda:checkParameter(3, 5, 5, aSensitivityEntry, aSensitivityWindow, mode))
+    enterButton10 = tk.Button(aSensitivityWindow, text="Enter", font=("Comic Sans MS", 15), command= lambda:checkParameter(3000, 5000, 5, aSensitivityEntry, aSensitivityWindow, mode))
     enterButton10.place(x = 250, y = 475, width = 300, height = 50)
 
     closeButton10 = tk.Button(aSensitivityWindow, text="Exit", font=("Comic Sans MS", 15), command=lambda:quit(aSensitivityWindow))
@@ -471,10 +471,10 @@ def vSensitivity(mode):
 
 
     userASensitivityLabel = tk.Label(vSensitivityWindow,text="Ventricle Sensitivity: " + str(user_list[user_id].VII[5]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=200,y=220)
-    vSensitivityLabel = tk.Label(vSensitivityWindow,text="Range: 3-5", bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=200,y=260)
+    vSensitivityLabel = tk.Label(vSensitivityWindow,text="Range: 3000-5000 mV", bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=200,y=260)
 
 
-    enterButton11 = tk.Button(vSensitivityWindow, text="Enter", font=("Comic Sans MS", 15), command = lambda: checkParameter(3, 5, 5, vSensitivityEntry, vSensitivityWindow, mode))
+    enterButton11 = tk.Button(vSensitivityWindow, text="Enter", font=("Comic Sans MS", 15), command = lambda: checkParameter(3000, 5000, 5, vSensitivityEntry, vSensitivityWindow, mode))
     enterButton11.place(x = 250, y = 475, width = 300, height = 50)
 
     closeButton11 = tk.Button(vSensitivityWindow, text="Exit", font=("Comic Sans MS", 15), command=lambda:quit(vSensitivityWindow))
