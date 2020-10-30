@@ -13,8 +13,8 @@ class User:
         self.password = password
         self.AOO = [1000, 1000, 10]
         self.VOO = [1000, 1000, 10]
-        self.AII = [1000, 1000, 10, 400, 300, 0]
-        self.VII = [1000, 1000, 10, 400, 300, 0]
+        self.AII = [1000, 1000, 10, 400, 300, 3.5]
+        self.VII = [1000, 1000, 10, 400, 300, 3.5]
 
     def change_name(self, new_name):
         self.name = new_name
@@ -256,12 +256,13 @@ def changeParameter(i, new_value, window, mode):
     window.destroy()
 
 def checkParameter(min, max, i, new_value, window, mode):
-    if (int(new_value.get()) > max or int(new_value.get()) < min):
-        invalidEntry = tk.Label(window, text = "Out of Range",bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=150,y=390)
-    else:
-        print(453)
-        changeParameter(i, new_value, window, mode)
-
+    try:
+        if (int(new_value.get()) > max or int(new_value.get()) < min):
+            invalidEntry = tk.Label(window, text = "Out of Range",bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=150,y=390)
+        else:
+            changeParameter(i, new_value, window, mode)
+    except ValueError:
+        invalidEntry = tk.Label(window, text = "Invalid Entry",bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=150,y=390)
 def lowerRate(mode):
     lowerRateWindow = tk.Toplevel(root,  height = HEIGHT, width = WIDTH, bg = '#FFB6C1')
     lowerRateWindow.title("Lower Rate Limit")
@@ -316,7 +317,7 @@ def amplitude(mode):
     elif (mode == "AII"):
         amplitudeLabel1 = tk.Label(amplitudeWindow,text="Atrial Amplitude: " + str(user_list[user_id].AII[1]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=225,y=220)
     
-    userAmplitudeLabel1 = tk.Label(amplitudeWindow,text="Range: 500-5000ms", bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=225,y=260)
+    userAmplitudeLabel1 = tk.Label(amplitudeWindow,text="Range: 500-5000mV", bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=225,y=260)
     enterButton3 = tk.Button(amplitudeWindow, text="Enter", font=("Comic Sans MS", 15), command = lambda:checkParameter(500, 5000, 1, amplitudeEntry, amplitudeWindow, mode))
     enterButton3.place(x = 250, y = 475, width = 300, height = 50)
 
@@ -357,7 +358,7 @@ def ventricularAmp(mode):
     elif (mode == "VII"):
         userVentricularAmpLabel1 = tk.Label(ventricularAmpWindow,text="Ventricular Amplitude: " + str(user_list[user_id].VII[1]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=175,y=220)
     
-    ventricularAmpLabel1 = tk.Label(ventricularAmpWindow,text="Range: 500-5000ms", bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=175,y=260)
+    ventricularAmpLabel1 = tk.Label(ventricularAmpWindow,text="Range: 500-5000mV", bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=175,y=260)
 
     enterButton5 = tk.Button(ventricularAmpWindow, text="Enter", font=("Comic Sans MS", 15), command = lambda: checkParameter(500, 5000, 1, ventricularAmpEntry, ventricularAmpWindow, mode))
     enterButton5.place(x = 250, y = 475, width = 300, height = 50)
