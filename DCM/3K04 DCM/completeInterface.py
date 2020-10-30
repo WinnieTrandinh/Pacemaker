@@ -16,6 +16,7 @@ class User:
         self.name = new_name
 
 user_list = []
+pacemakerNumber = [1234,5453,6789,5809,2354,1765,3490,5692,3745,6890]
 
 with open("pacemaker_users.txt") as i:
     names = i.readlines()
@@ -168,8 +169,11 @@ def signup():
 def signup2(signupWindow, name, password, confirmPassword):
     if(password.get() != confirmPassword.get()):
         incorrectPassLabel = tk.Label(signupWindow, text = "Not The Same Password!", font = ("Comic Sans MS", 20)).place(x = 150, y = 550, width = 500, height = 50)
-        
+    if(name.get() in names):
+        userExistsLabel = tk.Label(signupWindow, text = "User already exists!", bg = '#FFB6C1',font = ("Comic Sans MS", 20)).place(x = 150, y = 550, width = 500, height = 50)
     else: 
+        userDoesNotExistLabel = tk.Label(signupWindow, text = "Thank you!", bg = '#FFB6C1', font = ("Comic Sans MS", 20)).place(x = 150, y = 550, width = 500, height = 50)
+
         user_list.append(User(name.get(), confirmPassword.get()))
         f = open("pacemaker_users.txt", "a")
         f.write(name.get() + "\n")
@@ -179,9 +183,7 @@ def signup2(signupWindow, name, password, confirmPassword):
         f.close
         uSureButton = tk.Button(signupWindow, text="Confirm", font=("Comic Sans MS", 15), command = lambda:quit(signupWindow))
         uSureButton.place(x = 500, y = 675, width = 100, height = 50)
-
-        # pacemakerNumber = []
-        # pacemakerNumber.append(random.randint(1000,9999))
+        
 
 
 
@@ -192,11 +194,9 @@ def chooseDisplay(username, password):
     for i in range(len(user_list)):  #loops through all names within the user list 
         if(username == user_list[i].name and password == user_list[i].password):
 
-            incorrectPassLabel = tk.Label(root, text = "Welcome!", bg = '#FFB6C1', font = ("Comic Sans MS", 20)).place(x = 150, y = 550, width = 500, height = 50)
-            
+            incorrectPassLabel = tk.Label(root, text = "Welcome!", bg = '#FFB6C1', font = ("Comic Sans MS", 20)).place(x = 150, y = 550, width = 500, height = 50)   
+
         
-           # pacemakerLabel = tk.Label(root, text = "Pacemaker " + str(pacemakerNumber[i].get()) +  "Connected", bg = '#FF0000', font = ("Comic Sans MS", 10)).place(x = 550, y = 650, width = 200, height = 50)
-           
             
             # ************************************************* window demo ***************************************************************
             pacingModeWindow = tk.Toplevel(root,  height = HEIGHT, width = WIDTH, bg = '#FFB6C1')
@@ -204,23 +204,25 @@ def chooseDisplay(username, password):
 
             pacingLabel = tk.Label(pacingModeWindow, text = "Pacing Modes", bg = '#FFB6C1', font = ("Comic Sans MS", 20)).place(x = 150, y = 75, width = 500, height = 50)
 
-            AOOButton = tk.Button(pacingModeWindow, text="AOO", font=("Comic Sans MS", 15),command = lambda:dataValues())
+            pacemakerLabel = tk.Label(pacingModeWindow, text = "Pacemaker " + str(pacemakerNumber[i]) +  " Connected", bg = '#00FF00', font = ("Comic Sans MS", 10)).place(x = 550, y = 650, width = 200, height = 50)
+
+
+            AOOButton = tk.Button(pacingModeWindow, text="AOO", font=("Comic Sans MS", 15),command = lambda:dataValuesAOO())
             AOOButton.place(x = 250, y = 175, width = 300, height = 50)
 
-            VOOButton = tk.Button(pacingModeWindow, text="VOO", font=("Comic Sans MS", 15),command = lambda:dataValues())
+            VOOButton = tk.Button(pacingModeWindow, text="VOO", font=("Comic Sans MS", 15),command = lambda:dataValuesVOO())
             VOOButton.place(x = 250, y = 300, width = 300, height = 50)
 
-            AIIButton = tk.Button(pacingModeWindow, text="AII", font=("Comic Sans MS", 15),command = lambda:dataValues())
+            AIIButton = tk.Button(pacingModeWindow, text="AII", font=("Comic Sans MS", 15),command = lambda:dataValuesAII())
             AIIButton.place(x = 250, y = 425, width = 300, height = 50)
 
-            VVIButton = tk.Button(pacingModeWindow, text="VVI", font=("Comic Sans MS", 15),command = lambda:dataValues())
+            VVIButton = tk.Button(pacingModeWindow, text="VVI", font=("Comic Sans MS", 15),command = lambda:dataValuesVVI())
             VVIButton.place(x = 250, y = 550, width = 300, height = 50)
             # ***************************************************************************************************************************************************
 
         elif(username == user_list[i].name and password != user_list[i].password):
             incorrectPassLabel = tk.Label(root, text = "Incorrect Password!", bg = '#FFB6C1', font = ("Comic Sans MS", 20)).place(x = 150, y = 550, width = 500, height = 50)
-        
-    if(username not in names):
+        elif(username != user_list[i].name):
             noUserLabel = tk.Label(root, text = "User not found!", bg = '#FFB6C1', font = ("Comic Sans MS", 20)).place(x = 150, y = 550, width = 500, height = 50)
 
 def lowerRate():
@@ -232,7 +234,7 @@ def lowerRate():
 
 
 
-    lowerRateLabel1 = tk.Label(lowerRateWindow,text="Lower Rate Limit: " , bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=225,y=260)
+    lowerRateLabel1 = tk.Label(lowerRateWindow,text="Lower Rate Limit: 343-2000ms" , bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=225,y=260)
 
 
     enterButton1 = tk.Button(lowerRateWindow, text="Enter", font=("Comic Sans MS", 15), command = lowerRateLabel1)
@@ -264,7 +266,7 @@ def amplitude():
     amplitudeEntry = tk.Entry(amplitudeWindow, font=("Comic Sans MS", 20))
     amplitudeEntry.place(x = 150, y = 350, width = 500, height = 50)
 
-    amplitudeLabel1 = tk.Label(amplitudeWindow,text="Atrial Amplitude: ", bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=225,y=260)
+    amplitudeLabel1 = tk.Label(amplitudeWindow,text="Atrial Amplitude: 500-5000ms", bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=225,y=260)
 
 
 
@@ -282,7 +284,7 @@ def pulseWidth():
     pulseWidthEntry = tk.Entry(pulseWidthWindow, font=("Comic Sans MS", 20))
     pulseWidthEntry.place(x = 150, y = 350, width = 500, height = 50)
 
-    pulseWidthLabel1 = tk.Label(pulseWidthWindow,text="Atrial Pulse Width: ", bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=200,y=260)
+    pulseWidthLabel1 = tk.Label(pulseWidthWindow,text="Atrial Pulse Width: 1-30ms", bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=200,y=260)
 
 
 
@@ -300,7 +302,7 @@ def ventricularAmp():
     ventricularAmpEntry = tk.Entry(ventricularAmpWindow, font=("Comic Sans MS", 20))
     ventricularAmpEntry.place(x = 150, y = 350, width = 500, height = 50)
 
-    ventricularAmpLabel1 = tk.Label(ventricularAmpWindow,text="Ventricular Amplitude: ", bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=175,y=260)
+    ventricularAmpLabel1 = tk.Label(ventricularAmpWindow,text="Ventricular Amplitude: 500-5000ms", bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=175,y=260)
 
 
 
@@ -319,7 +321,7 @@ def ventricularPulse():
     ventricularPulseEntry = tk.Entry(ventricularPulseWindow, font=("Comic Sans MS", 20))
     ventricularPulseEntry.place(x = 150, y = 350, width = 500, height = 50)
 
-    ventricularPulseLabel1 = tk.Label(ventricularPulseWindow,text="Ventricular Pulse Width: ", bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=175,y=260)
+    ventricularPulseLabel1 = tk.Label(ventricularPulseWindow,text="Ventricular Pulse Width: 1-30ms", bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=175,y=260)
 
 
 
@@ -337,7 +339,7 @@ def VRP():
     VRPEntry = tk.Entry(VRPWindow, font=("Comic Sans MS", 20))
     VRPEntry.place(x = 150, y = 350, width = 500, height = 50)
 
-    VRPLabel1 = tk.Label(VRPWindow,text="VRP: ", bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=300,y=260)
+    VRPLabel1 = tk.Label(VRPWindow,text="VRP: 150-500ms", bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=300,y=260)
 
     
 
@@ -356,7 +358,7 @@ def ARP():
     ARPEntry.place(x = 150, y = 350, width = 500, height = 50)
 
 
-    ARPLabel1 = tk.Label(ARPWindow,text="ARP: Placeholder", bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=300,y=260)
+    ARPLabel1 = tk.Label(ARPWindow,text="ARP: 150-500ms", bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=300,y=260)
 
 
     enterButton8 = tk.Button(ARPWindow, text="Enter", font=("Comic Sans MS", 15))
@@ -365,56 +367,143 @@ def ARP():
     closeButton8 = tk.Button(ARPWindow, text="Exit", font=("Comic Sans MS", 15), command=lambda:quit(ARPWindow))
     closeButton8.place(x = 250, y = 575, width = 300, height = 50)
      
+def hysteresis():
+    hysteresisWindow = tk.Toplevel(root,  height = HEIGHT, width = WIDTH, bg = '#FFB6C1')
+    hysteresisWindow.title("Hysteresis")  
+
+    hysteresisEntry = tk.Entry(hysteresisWindow, font=("Comic Sans MS", 20))
+    hysteresisEntry.place(x = 150, y = 350, width = 500, height = 50)
+
+
+    hysteresisLabel1 = tk.Label(hysteresisWindow,text="Hysteresis Interval: 200-500ms", bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=200,y=260)
+
+
+    enterButton9 = tk.Button(hysteresisWindow, text="Enter", font=("Comic Sans MS", 15))
+    enterButton9.place(x = 250, y = 475, width = 300, height = 50)
+
+    closeButton9 = tk.Button(hysteresisWindow, text="Exit", font=("Comic Sans MS", 15), command=lambda:quit(hysteresisWindow))
+    closeButton9.place(x = 250, y = 575, width = 300, height = 50)
+
+def aSensitivity():
+    aSensitivityWindow = tk.Toplevel(root,  height = HEIGHT, width = WIDTH, bg = '#FFB6C1')
+    aSensitivityWindow.title("Atrium Sensitivity")  
+
+    aSensitivityEntry = tk.Entry(aSensitivityWindow, font=("Comic Sans MS", 20))
+    aSensitivityEntry.place(x = 150, y = 350, width = 500, height = 50)
+
+
+    aSensitivityLabel = tk.Label(aSensitivityWindow,text="Atrium Sensitivity: 0/1", bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=200,y=260)
+
+
+    enterButton10 = tk.Button(aSensitivityWindow, text="Enter", font=("Comic Sans MS", 15))
+    enterButton10.place(x = 250, y = 475, width = 300, height = 50)
+
+    closeButton10 = tk.Button(aSensitivityWindow, text="Exit", font=("Comic Sans MS", 15), command=lambda:quit(aSensitivityWindow))
+    closeButton10.place(x = 250, y = 575, width = 300, height = 50)
+
+def vSensitivity():
+    vSensitivityWindow = tk.Toplevel(root,  height = HEIGHT, width = WIDTH, bg = '#FFB6C1')
+    vSensitivityWindow.title("Ventricle Sensitivity")  
+
+    aSensitivityEntry = tk.Entry(vSensitivityWindow, font=("Comic Sans MS", 20))
+    aSensitivityEntry.place(x = 150, y = 350, width = 500, height = 50)
+
+
+    vSensitivityLabel = tk.Label(vSensitivityWindow,text="Ventricle Sensitivity: 0/1", bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=200,y=260)
+
+
+    enterButton11 = tk.Button(vSensitivityWindow, text="Enter", font=("Comic Sans MS", 15))
+    enterButton11.place(x = 250, y = 475, width = 300, height = 50)
+
+    closeButton11 = tk.Button(vSensitivityWindow, text="Exit", font=("Comic Sans MS", 15), command=lambda:quit(vSensitivityWindow))
+    closeButton11.place(x = 250, y = 575, width = 300, height = 50)
 
 
 
-def dataValues():
-    loginWindow = tk.Toplevel(root,  height = HEIGHT, width = WIDTH, bg = '#FFB6C1')
-    loginWindow.title("Logged In")
 
-    lowerRateButton = tk.Button(loginWindow, text="Lower Rate Limit", font=("Comic Sans MS", 15),command = lambda:lowerRate())
+def dataValuesAOO():
+    loginWindow1 = tk.Toplevel(root,  height = HEIGHT, width = WIDTH, bg = '#FFB6C1')
+    loginWindow1.title("Logged In")
+
+    lowerRateButton = tk.Button(loginWindow1, text="Lower Rate Limit", font=("Comic Sans MS", 15),command = lambda:lowerRate())
     lowerRateButton.place(x = 250, y = 25, width = 300, height = 50)
 
-    upperRateButton = tk.Button(loginWindow, text="Upper Rate Limit", font=("Comic Sans MS", 15),command = lambda:upperRate())
-    upperRateButton.place(x = 250, y = 125, width = 300, height = 50)
+    amplitudeButton = tk.Button(loginWindow1, text="Atrial Amplitude", font=("Comic Sans MS", 15),command = lambda:amplitude())
+    amplitudeButton.place(x = 250, y = 125, width = 300, height = 50)
 
-    amplitudeButton = tk.Button(loginWindow, text="Atrial Amplitude", font=("Comic Sans MS", 15),command = lambda:amplitude())
-    amplitudeButton.place(x = 250, y = 225, width = 300, height = 50)
+    pulseWidthButton = tk.Button(loginWindow1, text="Atrial Pulse Width", font=("Comic Sans MS", 15),command = lambda:pulseWidth())
+    pulseWidthButton.place(x = 250, y = 225, width = 300, height = 50)
 
-    pulseWidthButton = tk.Button(loginWindow, text="Atrial Pulse Width", font=("Comic Sans MS", 15),command = lambda:pulseWidth())
-    pulseWidthButton.place(x = 250, y = 325, width = 300, height = 50)
+    closeButton12 = tk.Button(loginWindow1, text="Exit", font=("Comic Sans MS", 15), command=lambda:quit(loginWindow1))
+    closeButton12.place(x = 250, y = 625, width = 300, height = 50)
 
-    ventricularAmpButton = tk.Button(loginWindow, text="Ventricular Amplitude", font=("Comic Sans MS", 15),command = lambda:ventricularAmp())
-    ventricularAmpButton.place(x = 250, y = 425, width = 300, height = 50)
+def dataValuesVOO():
+    loginWindow2 = tk.Toplevel(root,  height = HEIGHT, width = WIDTH, bg = '#FFB6C1')
+    loginWindow2.title("Logged In")
 
-    ventricularPulseButton = tk.Button(loginWindow, text="Ventricular Pulse Width", font=("Comic Sans MS", 15),command = lambda:ventricularPulse())
-    ventricularPulseButton.place(x = 250, y = 525, width = 300, height = 50)
+    lowerRateButton = tk.Button(loginWindow2, text="Lower Rate Limit", font=("Comic Sans MS", 15),command = lambda:lowerRate())
+    lowerRateButton.place(x = 250, y = 25, width = 300, height = 50)
 
-    VRPButton = tk.Button(loginWindow, text="VRP", font=("Comic Sans MS", 15),command = lambda:VRP())
-    VRPButton.place(x = 250, y = 625, width = 300, height = 50)
+    ventricularAmpButton = tk.Button(loginWindow2, text="Ventricular Amplitude", font=("Comic Sans MS", 15),command = lambda:ventricularAmp())
+    ventricularAmpButton.place(x = 250, y = 125, width = 300, height = 50)
 
-    ARPButton = tk.Button(loginWindow, text="ARP", font=("Comic Sans MS", 15),command = lambda:ARP())
-    ARPButton.place(x = 250, y = 725, width = 300, height = 50)
+    ventricularPulseButton = tk.Button(loginWindow2, text="Ventricular Pulse Width", font=("Comic Sans MS", 15),command = lambda:ventricularPulse())
+    ventricularPulseButton.place(x = 250, y = 225, width = 300, height = 50)
 
-# def pacingMode():
-#     pacingModeWindow = tk.Toplevel(root,  height = HEIGHT, width = WIDTH, bg = '#FFB6C1')
-#     pacingModeWindow.title("Pacing Modes")
+    closeButton13 = tk.Button(loginWindow2, text="Exit", font=("Comic Sans MS", 15), command=lambda:quit(loginWindow2))
+    closeButton13.place(x = 250, y = 625, width = 300, height = 50)
 
-#     AOOButton = tk.Button(pacingModeWindow, text="AOO", font=("Comic Sans MS", 15))
-#     AOOButton.place(x = 250, y = 175, width = 300, height = 50)
+def dataValuesAII():
+    loginWindow3 = tk.Toplevel(root,  height = HEIGHT, width = WIDTH, bg = '#FFB6C1')
+    loginWindow3.title("Logged In")
 
-#     VOOButton = tk.Button(pacingModeWindow, text="VOO", font=("Comic Sans MS", 15))
-#     VOOButton.place(x = 250, y = 300, width = 300, height = 50)
+    lowerRateButton = tk.Button(loginWindow3, text="Lower Rate Limit", font=("Comic Sans MS", 15),command = lambda:lowerRate())
+    lowerRateButton.place(x = 250, y = 25, width = 300, height = 50)
 
-#     AIIButton = tk.Button(pacingModeWindow, text="AII", font=("Comic Sans MS", 15))
-#     AIIButton.place(x = 250, y = 425, width = 300, height = 50)
+    amplitudeButton = tk.Button(loginWindow3, text="Atrial Amplitude", font=("Comic Sans MS", 15),command = lambda:amplitude())
+    amplitudeButton.place(x = 250, y = 125, width = 300, height = 50)
 
-#     VVIButton = tk.Button(pacingModeWindow, text="VVI", font=("Comic Sans MS", 15))
-#     VVIButton.place(x = 250, y = 550, width = 300, height = 50)
+    pulseWidthButton = tk.Button(loginWindow3, text="Atrial Pulse Width", font=("Comic Sans MS", 15),command = lambda:pulseWidth())
+    pulseWidthButton.place(x = 250, y = 225, width = 300, height = 50)
+
+    ARPButton = tk.Button(loginWindow3, text="ARP", font=("Comic Sans MS", 15),command = lambda:ARP())
+    ARPButton.place(x = 250, y = 325, width = 300, height = 50)
+
+    hysteresisButton = tk.Button(loginWindow3, text="Hysteresis Interval", font=("Comic Sans MS", 15),command = lambda:hysteresis())
+    hysteresisButton.place(x = 250, y = 425, width = 300, height = 50)
+
+    aSensitivityButton = tk.Button(loginWindow3, text="Atrium Sensitivity", font=("Comic Sans MS", 15),command = lambda:aSensitivity())
+    aSensitivityButton.place(x = 250, y = 525, width = 300, height = 50)
+
+    closeButton14 = tk.Button(loginWindow3, text="Exit", font=("Comic Sans MS", 15), command=lambda:quit(loginWindow3))
+    closeButton14.place(x = 250, y = 625, width = 300, height = 50)
+
+def dataValuesVVI():
+    loginWindow4 = tk.Toplevel(root,  height = HEIGHT, width = WIDTH, bg = '#FFB6C1')
+    loginWindow4.title("Logged In")
+
+    lowerRateButton = tk.Button(loginWindow4, text="Lower Rate Limit", font=("Comic Sans MS", 15),command = lambda:lowerRate())
+    lowerRateButton.place(x = 250, y = 25, width = 300, height = 50)
 
 
+    ventricularAmpButton = tk.Button(loginWindow4, text="Ventricular Amplitude", font=("Comic Sans MS", 15),command = lambda:ventricularAmp())
+    ventricularAmpButton.place(x = 250, y = 125, width = 300, height = 50)
+
+    ventricularPulseButton = tk.Button(loginWindow4, text="Ventricular Pulse Width", font=("Comic Sans MS", 15),command = lambda:ventricularPulse())
+    ventricularPulseButton.place(x = 250, y = 225, width = 300, height = 50)
 
 
+    VRPButton = tk.Button(loginWindow4, text="VRP", font=("Comic Sans MS", 15),command = lambda:VRP())
+    VRPButton.place(x = 250, y = 325, width = 300, height = 50)
+
+    hysteresisButton = tk.Button(loginWindow4, text="Hysteresis Interval", font=("Comic Sans MS", 15),command = lambda:hysteresis())
+    hysteresisButton.place(x = 250, y = 425, width = 300, height = 50)
+
+    vSensitivityButton = tk.Button(loginWindow4, text="Ventricle Sensitivity", font=("Comic Sans MS", 15),command = lambda:vSensitivity())
+    vSensitivityButton.place(x = 250, y = 525, width = 300, height = 50)
+
+    closeButton15 = tk.Button(loginWindow4, text="Exit", font=("Comic Sans MS", 15), command=lambda:quit(loginWindow4))
+    closeButton15.place(x = 250, y = 625, width = 300, height = 50)
         
 
 	           
