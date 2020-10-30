@@ -6,6 +6,7 @@
 
 import tkinter as tk
 import random
+import time
 
 class User: 
     def __init__(self, name, password):
@@ -189,7 +190,6 @@ def signup2(signupWindow, name, password, confirmPassword):
             userExistsLabel = tk.Label(signupWindow, text = "User already exists!", bg = '#FFB6C1',font = ("Comic Sans MS", 20)).place(x = 150, y = 550, width = 500, height = 50)
             flag = 0
     if(flag == 1) : 
-        userDoesNotExistLabel = tk.Label(signupWindow, text = "Thank you!", bg = '#FFB6C1', font = ("Comic Sans MS", 20)).place(x = 150, y = 550, width = 500, height = 50)
         user_list.append(User(name.get(), confirmPassword.get()))
         f = open("pacemaker_users.txt", "a")
         f.write(name.get() + "\n")
@@ -197,8 +197,10 @@ def signup2(signupWindow, name, password, confirmPassword):
         f = open("pacemaker_passwords.txt", "a")
         f.write(confirmPassword.get() + "\n")
         f.close
-        uSureButton = tk.Button(signupWindow, text="Confirm", font=("Comic Sans MS", 15), command = lambda:quit(signupWindow))
-        uSureButton.place(x = 500, y = 675, width = 100, height = 50)
+        #root.after(1000, userDoesNotExistLabel = tk.Label(signupWindow, text = "Thank you!", bg = '#FFB6C1', font = ("Comic Sans MS", 20)).place(x = 150, y = 550, width = 500, height = 50)
+        root.after(250, signupWindow.destroy())
+        #uSureButton = tk.Button(signupWindow, text="Confirm", font=("Comic Sans MS", 15), command = lambda:quit(signupWindow))
+        #uSureButton.place(x = 500, y = 675, width = 100, height = 50)
         
 
 
