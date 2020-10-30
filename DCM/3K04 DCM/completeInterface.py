@@ -6,7 +6,6 @@
 
 import tkinter as tk
 import random
-import time
 
 class User: 
     def __init__(self, name, password):
@@ -197,7 +196,6 @@ def signup2(signupWindow, name, password, confirmPassword):
         f = open("pacemaker_passwords.txt", "a")
         f.write(confirmPassword.get() + "\n")
         f.close
-        #root.after(1000, userDoesNotExistLabel = tk.Label(signupWindow, text = "Thank you!", bg = '#FFB6C1', font = ("Comic Sans MS", 20)).place(x = 150, y = 550, width = 500, height = 50)
         root.after(250, signupWindow.destroy())
         #uSureButton = tk.Button(signupWindow, text="Confirm", font=("Comic Sans MS", 15), command = lambda:quit(signupWindow))
         #uSureButton.place(x = 500, y = 675, width = 100, height = 50)
@@ -257,6 +255,12 @@ def changeParameter(i, new_value, window, mode):
 
     window.destroy()
 
+def checkParameter(min, max, i, new_value, window, mode):
+    if (int(new_value.get()) > max or int(new_value.get()) < min):
+        invalidEntry = tk.Label(window, text = "Out of Range",bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=150,y=390)
+    else:
+        print(453)
+        changeParameter(i, new_value, window, mode)
 
 def lowerRate(mode):
     lowerRateWindow = tk.Toplevel(root,  height = HEIGHT, width = WIDTH, bg = '#FFB6C1')
@@ -265,6 +269,7 @@ def lowerRate(mode):
     lowerRateEntry = tk.Entry(lowerRateWindow, font=("Comic Sans MS", 20))
     lowerRateEntry.place(x = 150, y = 350, width = 500, height = 50)
 
+    invalidLowerRateEntry = tk.Label(lowerRateWindow, bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=150,y=390)
 
     if (mode == "AOO"):
         lowerRateLabel1 = tk.Label(lowerRateWindow,text= ("Lower Rate Limit: " + str(user_list[user_id].AOO[0])) , bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=225,y=210)
@@ -276,8 +281,8 @@ def lowerRate(mode):
         lowerRateLabel1 = tk.Label(lowerRateWindow,text= ("Lower Rate Limit: " + str(user_list[user_id].VII[0])) , bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=225,y=210)
     
     userLowerRateLabel = tk.Label(lowerRateWindow,text="Range: 343-2000ms" , bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=225,y=260)
-
-    enterButton1 = tk.Button(lowerRateWindow, text="Enter", font=("Comic Sans MS", 15), command = lambda: changeParameter(0, lowerRateEntry, lowerRateWindow, mode))
+    
+    enterButton1 = tk.Button(lowerRateWindow, text="Enter", font=("Comic Sans MS", 15), command = lambda: checkParameter(343, 2000, 0, lowerRateEntry, lowerRateWindow, mode))
     enterButton1.place(x = 250, y = 475, width = 300, height = 50)
 
     closeButton1 = tk.Button(lowerRateWindow, text="Exit", font=("Comic Sans MS", 15), command=lambda:quit(lowerRateWindow))
@@ -312,7 +317,7 @@ def amplitude(mode):
         amplitudeLabel1 = tk.Label(amplitudeWindow,text="Atrial Amplitude: " + str(user_list[user_id].AII[1]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=225,y=220)
     
     userAmplitudeLabel1 = tk.Label(amplitudeWindow,text="Range: 500-5000ms", bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=225,y=260)
-    enterButton3 = tk.Button(amplitudeWindow, text="Enter", font=("Comic Sans MS", 15), command = lambda:changeParameter(1, amplitudeEntry, amplitudeWindow, mode))
+    enterButton3 = tk.Button(amplitudeWindow, text="Enter", font=("Comic Sans MS", 15), command = lambda:checkParameter(500, 5000, 1, amplitudeEntry, amplitudeWindow, mode))
     enterButton3.place(x = 250, y = 475, width = 300, height = 50)
 
     closeButton3 = tk.Button(amplitudeWindow, text="Exit", font=("Comic Sans MS", 15), command=lambda:quit(amplitudeWindow))
@@ -333,7 +338,7 @@ def pulseWidth(mode):
     
     pulseWidthLabel1 = tk.Label(pulseWidthWindow,text="Range: 1-30ms", bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=200,y=260)
 
-    enterButton4 = tk.Button(pulseWidthWindow, text="Enter", font=("Comic Sans MS", 15), command = lambda: (changeParameter(2, pulseWidthEntry, pulseWidthWindow, mode)))
+    enterButton4 = tk.Button(pulseWidthWindow, text="Enter", font=("Comic Sans MS", 15), command = lambda: (checkParameter(1, 30, 2, pulseWidthEntry, pulseWidthWindow, mode)))
     enterButton4.place(x = 250, y = 475, width = 300, height = 50)
 
     closeButton4 = tk.Button(pulseWidthWindow, text="Exit", font=("Comic Sans MS", 15), command=lambda:quit(pulseWidthWindow))
@@ -354,7 +359,7 @@ def ventricularAmp(mode):
     
     ventricularAmpLabel1 = tk.Label(ventricularAmpWindow,text="Range: 500-5000ms", bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=175,y=260)
 
-    enterButton5 = tk.Button(ventricularAmpWindow, text="Enter", font=("Comic Sans MS", 15), command = lambda: changeParameter(1, ventricularAmpEntry, ventricularAmpWindow, mode))
+    enterButton5 = tk.Button(ventricularAmpWindow, text="Enter", font=("Comic Sans MS", 15), command = lambda: checkParameter(500, 5000, 1, ventricularAmpEntry, ventricularAmpWindow, mode))
     enterButton5.place(x = 250, y = 475, width = 300, height = 50)
 
     closeButton5 = tk.Button(ventricularAmpWindow, text="Exit", font=("Comic Sans MS", 15), command=lambda:quit(ventricularAmpWindow))
@@ -376,7 +381,7 @@ def ventricularPulse(mode):
     
     ventricularPulseLabel1 = tk.Label(ventricularPulseWindow,text="Ventricular Pulse Width: 1-30ms", bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=175,y=260)
 
-    enterButton6 = tk.Button(ventricularPulseWindow, text="Enter", font=("Comic Sans MS", 15), command = lambda: changeParameter(2, ventricularPulseEntry, ventricularPulseWindow, mode))
+    enterButton6 = tk.Button(ventricularPulseWindow, text="Enter", font=("Comic Sans MS", 15), command = lambda: checkParameter(1, 30, 2, ventricularPulseEntry, ventricularPulseWindow, mode))
     enterButton6.place(x = 250, y = 475, width = 300, height = 50)
 
     closeButton6 = tk.Button(ventricularPulseWindow, text="Exit", font=("Comic Sans MS", 15), command=lambda:quit(ventricularPulseWindow))
@@ -393,7 +398,7 @@ def VRP(mode):
     userVRPLabel1 = tk.Label(VRPWindow,text="VRP: " + str(user_list[user_id].VII[3]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=300,y=260)
     VRPLabel1 = tk.Label(VRPWindow,text="VRP: 150-500ms", bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=300,y=220)
 
-    enterButton7 = tk.Button(VRPWindow, text="Enter", font=("Comic Sans MS", 15), command = lambda: changeParameter(3, VRPEntry, VRPWindow, mode))
+    enterButton7 = tk.Button(VRPWindow, text="Enter", font=("Comic Sans MS", 15), command = lambda: checkParameter(150, 500, 3, VRPEntry, VRPWindow, mode))
     enterButton7.place(x = 250, y = 475, width = 300, height = 50)
 
     closeButton7 = tk.Button(VRPWindow, text="Exit", font=("Comic Sans MS", 15), command=lambda:quit(VRPWindow))
@@ -412,7 +417,7 @@ def ARP(mode):
     ARPLabel1 = tk.Label(ARPWindow,text="Range: 150-500ms", bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=300,y=220)
 
 
-    enterButton8 = tk.Button(ARPWindow, text="Enter", font=("Comic Sans MS", 15), command = lambda: changeParameter(3, ARPEntry, ARPWindow, mode))
+    enterButton8 = tk.Button(ARPWindow, text="Enter", font=("Comic Sans MS", 15), command = lambda: checkParameter(150, 500, 3, ARPEntry, ARPWindow, mode))
     enterButton8.place(x = 250, y = 475, width = 300, height = 50)
 
     closeButton8 = tk.Button(ARPWindow, text="Exit", font=("Comic Sans MS", 15), command=lambda:quit(ARPWindow))
@@ -433,7 +438,7 @@ def hysteresis(mode):
     hysteresisLabel1 = tk.Label(hysteresisWindow,text="Hysteresis Interval: 200-500ms", bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=200,y=220)
 
 
-    enterButton9 = tk.Button(hysteresisWindow, text="Enter", font=("Comic Sans MS", 15), command = lambda:changeParameter(4, hysteresisEntry, hysteresisWindow, mode))
+    enterButton9 = tk.Button(hysteresisWindow, text="Enter", font=("Comic Sans MS", 15), command = lambda:checkParameter(200, 500, 4, hysteresisEntry, hysteresisWindow, mode))
     enterButton9.place(x = 250, y = 475, width = 300, height = 50)
 
     closeButton9 = tk.Button(hysteresisWindow, text="Exit", font=("Comic Sans MS", 15), command=lambda:quit(hysteresisWindow))
@@ -447,10 +452,10 @@ def aSensitivity(mode):
     aSensitivityEntry.place(x = 150, y = 350, width = 500, height = 50)
 
     userASensitivityLabel = tk.Label(aSensitivityWindow,text="Atrium Sensitivity: " + str(user_list[user_id].AII[5]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=200,y=220)
-    aSensitivityLabel = tk.Label(aSensitivityWindow,text="Range: 0/1", bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=200,y=260)
+    aSensitivityLabel = tk.Label(aSensitivityWindow,text="Range: 3-5", bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=200,y=260)
 
 
-    enterButton10 = tk.Button(aSensitivityWindow, text="Enter", font=("Comic Sans MS", 15), command= lambda:changeParameter(5, aSensitivityEntry, aSensitivityWindow, mode))
+    enterButton10 = tk.Button(aSensitivityWindow, text="Enter", font=("Comic Sans MS", 15), command= lambda:checkParameter(3, 5, 5, aSensitivityEntry, aSensitivityWindow, mode))
     enterButton10.place(x = 250, y = 475, width = 300, height = 50)
 
     closeButton10 = tk.Button(aSensitivityWindow, text="Exit", font=("Comic Sans MS", 15), command=lambda:quit(aSensitivityWindow))
@@ -465,10 +470,10 @@ def vSensitivity(mode):
 
 
     userASensitivityLabel = tk.Label(vSensitivityWindow,text="Ventricle Sensitivity: " + str(user_list[user_id].VII[5]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=200,y=220)
-    vSensitivityLabel = tk.Label(vSensitivityWindow,text="Range: 0/1", bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=200,y=260)
+    vSensitivityLabel = tk.Label(vSensitivityWindow,text="Range: 3-5", bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=200,y=260)
 
 
-    enterButton11 = tk.Button(vSensitivityWindow, text="Enter", font=("Comic Sans MS", 15), command = lambda: changeParameter(5, vSensitivityEntry, vSensitivityWindow, mode))
+    enterButton11 = tk.Button(vSensitivityWindow, text="Enter", font=("Comic Sans MS", 15), command = lambda: checkParameter(3, 5, 5, vSensitivityEntry, vSensitivityWindow, mode))
     enterButton11.place(x = 250, y = 475, width = 300, height = 50)
 
     closeButton11 = tk.Button(vSensitivityWindow, text="Exit", font=("Comic Sans MS", 15), command=lambda:quit(vSensitivityWindow))
