@@ -42,6 +42,7 @@ for i in range(len(names)):
 for i in range(len(user_list)):
     print(user_list[i].name + "   " + user_list[i].password)
 
+print (len(user_list))
 
 # *****************************************  new classes ***************************************************
 # parent class of all gComp (graphical component) classes, excluding the label
@@ -179,16 +180,13 @@ def signup():
         maxUsersLabel = tk.Label(root, text = "Max Users Reached!", bg = '#FFB6C1', font = ("Comic Sans MS", 20)).place(x = 150, y = 550, width = 500, height = 50)
 
 def signup2(signupWindow, name, password, confirmPassword):
-    flag = 1
-
-    if(password.get() != confirmPassword.get()):
-        incorrectPassLabel = tk.Label(signupWindow, text = "Not The Same Password!", font = ("Comic Sans MS", 20)).place(x = 150, y = 550, width = 500, height = 50)
-        flag = 0
-    for i in user_list:
-        if(name.get() in i.name):
-            userExistsLabel = tk.Label(signupWindow, text = "User already exists!", bg = '#FFB6C1',font = ("Comic Sans MS", 20)).place(x = 150, y = 550, width = 500, height = 50)
-            flag = 0
-    if(flag == 1) : 
+    if (name.get() == "" or password.get() == "" or confirmPassword.get() == ""):
+        incorrectPassLabel = tk.Label(signupWindow, text = "Empty Field(s)", font = ("Comic Sans MS", 20)).place(x = 150, y = 550, width = 500, height = 50)
+    elif (any(x.name == name.get() for x in user_list)):
+        userExistsLabel = tk.Label(signupWindow, text = "User already exists!", bg = '#FFB6C1',font = ("Comic Sans MS", 20)).place(x = 150, y = 550, width = 500, height = 50)
+    elif(password.get() != confirmPassword.get()):
+        incorrectPassLabel = tk.Label(signupWindow, text = "Password Doesn't Match", font = ("Comic Sans MS", 20)).place(x = 150, y = 550, width = 500, height = 50)
+    else: 
         user_list.append(User(name.get(), confirmPassword.get()))
         f = open("pacemaker_users.txt", "a")
         f.write(name.get() + "\n")
