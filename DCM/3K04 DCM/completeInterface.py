@@ -7,6 +7,7 @@
 import tkinter as tk
 import random
 
+# information regarding a user
 class User: 
     def __init__(self, name, password):
         self.name = name
@@ -23,7 +24,7 @@ class User:
         self.password = new_password
     
     
-
+# keep track of current users by reading from txt file
 user_list = []
 user_id = 0
 pacemakerNumber = [1234,5453,6789,5809,2354,1765,3490,5692,3745,6890]
@@ -44,7 +45,7 @@ for i in range(len(user_list)):
 
 print (len(user_list))
 
-# *****************************************  new classes ***************************************************
+# **************************** Graphical classes ***************************************************
 # parent class of all gComp (graphical component) classes, excluding the label
 # also happens to be a button
 class Button(tk.Tk):
@@ -73,10 +74,7 @@ class Entry(Button):
     # different constructor needed though
     def __init__(self, canvas):
         self.gComp = tk.Entry(canvas, font=("Comic Sans MS", 20));
-    # kind of stupid to have a wrapper function with the same name,
-    # but I'm too lazy to change all the get() calls in the code
-    # Probably better to do that though, and change this function
-    # into getEntry() or something.
+    # get contents of entry
     def get(self):
         return self.gComp.get()
 
@@ -100,10 +98,9 @@ class Window(tk.Tk):
     # returns the actual window object so that it can be used as a canvas for gComponents
     def getWindow(self):
         return self.window
+# ******************************************************************************************
 
-# ****************************************************************************************************
-
-
+# base screen which coincides with the login screen
 root = tk.Tk()
 root.title('Login/Signup')
 
@@ -118,39 +115,27 @@ background_image = tk.PhotoImage(file='Heart.png')
 background_label = tk.Label(root, image=background_image)
 background_label.place(relwidth=1, relheight=1)
 
-# ************************* label demo ************************************
-fooLabel = Label(root, "foo")
-fooLabel.place(100, 50, 200)
-fooLabel.hide()
-# *************************************************************************
 
 welcomeLabel = tk.Label(root, text = "Welcome!", bg = '#FFB6C1', font = ("Comic Sans MS", 30))
 
 welcomeLabel.place(x= 300, y= 100, width = 200,)
 
-nameLabel = tk.Label(root,text="Enter Name:", bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=150,y=260)
 
-# ******************* Entry demo ******************************************
-#nameEntry = tk.Entry(root, font=("Comic Sans MS", 20))
-#nameEntry.place(x = 150, y = 300, width = 500, height = 50)
+# user and password entries
+nameLabel = tk.Label(root,text="Enter Name:", bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=150,y=260)
 nameEntry = Entry(root)
 nameEntry.place(150, 300, 500, 50)
-# *************************************************************************
 
 passwordLabel = tk.Label(root,text="Enter Password:", bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=150,y=460)
-
-# *************************** Password demo *******************************
-#passwordEntry = tk.Entry(root, font=("Comic Sans MS", 20), show = "*")
-#passwordEntry.place(x = 150, y = 500, width = 500, height = 50)
 passwordEntry = PasswordEntry(root)
 passwordEntry.place(150, 500, 500, 50)
-# *************************************************************************
 
 def quit(window):
         window.destroy()
 
+# signup of new user window
 def signup():
-
+    # set max user limit to 10
     if(len(user_list) < 10):
         signupWindow = tk.Toplevel(root,  height = HEIGHT, width = WIDTH, bg = '#FFB6C1')
         signupWindow.title("Sign up")
@@ -179,6 +164,7 @@ def signup():
     elif(len(user_list) >= 10):
         maxUsersLabel = tk.Label(root, text = "Max Users Reached!", bg = '#FFB6C1', font = ("Comic Sans MS", 20)).place(x = 150, y = 550, width = 500, height = 50)
 
+# check if criteria for new user valid
 def signup2(signupWindow, name, password, confirmPassword):
     if (any(x.name == name.get() for x in user_list)):
         userExistsLabel = tk.Label(signupWindow, text = "User already exists!", bg = '#FFB6C1',font = ("Comic Sans MS", 20)).place(x = 150, y = 550, width = 500, height = 50)
@@ -186,7 +172,8 @@ def signup2(signupWindow, name, password, confirmPassword):
         incorrectPassLabel = tk.Label(signupWindow, text = "Empty Field(s)", font = ("Comic Sans MS", 20)).place(x = 150, y = 550, width = 500, height = 50)
     elif(password.get() != confirmPassword.get()):
         incorrectPassLabel = tk.Label(signupWindow, text = "Password Doesn't Match", font = ("Comic Sans MS", 20)).place(x = 150, y = 550, width = 500, height = 50)
-    else: 
+    else:
+        # user successfully created
         user_list.append(User(name.get(), confirmPassword.get()))
         f = open("pacemaker_users.txt", "a")
         f.write(name.get() + "\n")
@@ -200,19 +187,19 @@ def signup2(signupWindow, name, password, confirmPassword):
         
 
 
-
+# window for choosing operating mode
 def chooseDisplay(username, password):
     incorrectPassLabel = tk.Label(root, bg = '#FFB6C1', font = ("Comic Sans MS", 20)).place(x = 150, y = 550, width = 500, height = 50)
     num =0
     flag = 0
-    for i in user_list:  #loops through all names within the user list 
+    for i in user_list:  #loops through all names within the user list
+        # only enter this window if sign in successful
         if(username == i.name and password == i.password):
             flag = 1
             incorrectPassLabel = tk.Label(root, text = "Welcome!", bg = '#FFB6C1', font = ("Comic Sans MS", 20)).place(x = 150, y = 550, width = 500, height = 50)   
 
         
             
-            # ********************************************* window demo ***********************************************************
             pacingModeWindow = tk.Toplevel(root,  height = HEIGHT, width = WIDTH, bg = '#FFB6C1')
             pacingModeWindow.title("Pacing Modes")
 
@@ -232,7 +219,7 @@ def chooseDisplay(username, password):
 
             VVIButton = tk.Button(pacingModeWindow, text="VVI", font=("Comic Sans MS", 15),command = lambda:dataValuesVVI())
             VVIButton.place(x = 250, y = 550, width = 300, height = 50)
-            # ***********************************************************************************************************************************************
+
         if(username == i.name and password != i.password and flag == 0):
             incorrectPassLabel = tk.Label(root, text = "Incorrect Username or Password!", bg = '#FFB6C1', font = ("Comic Sans MS", 20)).place(x = 150, y = 550, width = 500, height = 50)
             flag = 1
@@ -241,6 +228,7 @@ def chooseDisplay(username, password):
             flag = 1
         num = num + 1
 
+# window to change parameters
 def changeParameter(i, new_value, window, mode):
     if (mode == "AOO"):
         user_list[user_id].AOO[i] = new_value.get()
@@ -253,6 +241,7 @@ def changeParameter(i, new_value, window, mode):
 
     window.destroy()
 
+# checks if parameter entered is valid
 def checkParameter(min, max, i, new_value, window, mode):
     try:
         if (int(new_value.get()) > max or int(new_value.get()) < min):
@@ -261,6 +250,8 @@ def checkParameter(min, max, i, new_value, window, mode):
             changeParameter(i, new_value, window, mode)
     except ValueError:
         invalidEntry = tk.Label(window, text = "Invalid Entry",bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=150,y=390)
+
+# ************************** individual windows for each parameter *****************************************************
 def lowerRate(mode):
     lowerRateWindow = tk.Toplevel(root,  height = HEIGHT, width = WIDTH, bg = '#FFB6C1')
     lowerRateWindow.title("Lower Rate Limit")
@@ -477,10 +468,10 @@ def vSensitivity(mode):
 
     closeButton11 = tk.Button(vSensitivityWindow, text="Exit", font=("Comic Sans MS", 15), command=lambda:quit(vSensitivityWindow))
     closeButton11.place(x = 250, y = 575, width = 300, height = 50)
+# **********************************************************************************************************************
 
 
-
-# MODES
+# ************************************ windows for each operating mode *************************************************
 def dataValuesAOO():
     loginWindow1 = tk.Toplevel(root,  height = HEIGHT, width = WIDTH, bg = '#FFB6C1')
     loginWindow1.title("Logged In")
@@ -564,18 +555,16 @@ def dataValuesVVI():
 
     closeButton15 = tk.Button(loginWindow4, text="Exit", font=("Comic Sans MS", 15), command=lambda:quit(loginWindow4))
     closeButton15.place(x = 250, y = 625, width = 300, height = 50)
-        
+# **********************************************************************************************************************
 
-	           
+# login screen buttons
 loginButton = tk.Button(root, text="Login", font=("Comic Sans MS", 15), command = lambda: chooseDisplay(nameEntry.get(), passwordEntry.get()))
 loginButton.place(x = 350, y = 600, width = 100, height = 50)
 
 signupButton = tk.Button(root, text="Sign Up", font=("Comic Sans MS", 15), command = lambda: signup())
 signupButton.place(x = 350, y = 675, width = 100, height = 50)
 
-
-                
-
+# repeatedly loop the program
 root.mainloop()
 
 
