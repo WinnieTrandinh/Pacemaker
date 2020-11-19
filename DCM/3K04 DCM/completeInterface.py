@@ -36,6 +36,46 @@ with open("pacemaker_passwords.txt") as i:
     password_list = i.readlines()
     password_list = [x.strip() for x in password_list]
 
+with open("user1.txt") as i:
+    user1_param = i.readlines()
+    user1_param = [x.strip() for x in user1_param]
+
+with open("user2.txt") as i:
+    user2_param = i.readlines()
+    user2_param = [x.strip() for x in user2_param]
+
+with open("user3.txt") as i:
+    user3_param = i.readlines()
+    user3_param = [x.strip() for x in user3_param]
+
+with open("user4.txt") as i:
+    user4_param = i.readlines()
+    user4_param = [x.strip() for x in user4_param]
+
+with open("user5.txt") as i:
+    user5_param = i.readlines()
+    user5_param = [x.strip() for x in user5_param]
+
+with open("user6.txt") as i:
+    user6_param = i.readlines()
+    user6_param = [x.strip() for x in user6_param]
+
+with open("user7.txt") as i:
+    user7_param = i.readlines()
+    user7_param = [x.strip() for x in user7_param]
+
+with open("user8.txt") as i:
+    user8_param = i.readlines()
+    user8_param = [x.strip() for x in user8_param]
+
+with open("user9.txt") as i:
+    user9_param = i.readlines()
+    user9_param = [x.strip() for x in user9_param]
+
+with open("user10.txt") as i:
+    user10_param = i.readlines()
+    user10_param = [x.strip() for x in user10_param]
+
 for i in range(len(names)):
     user_list.append(User(names[i], password_list[i]))
 
