@@ -12,7 +12,7 @@ ser=serial.Serial("COM4",115200, timeout = 2)
 # endian = little
 # defaults to @ which uses native endian
 #   native of windows OS is little
-#   native of FRDM is little according to Thomas?
+#   FRDM board set to little endian in model config
 # @ will be first char in format string
 
 # byte format string
@@ -31,16 +31,18 @@ ser=serial.Serial("COM4",115200, timeout = 2)
 # format = 'xxxxxxxx' where x can be any of the above format chars
 
 
-messageS = pack('HHfH', 1, 2, 3.55, 1)
-print(messageS)
+messageS = pack('@HHfH', 152, 2, 3.55, 1)
+print("messageS:     ", messageS)
 print("num bytes: ", ser.write(messageS) )
 #print("num bytes: ", ser.write([22, 85, 0,1,1,1,1,1,1,55]))
 
-messageR = unpack('HHfH', ser.read(10) );
-# print("message: ", message);
+messageR_Raw = ser.read(10)
+print("messageR_Raw: ", messageR_Raw)
+messageR = unpack('@HHfH', messageR_Raw);
+print("messageR:     ", messageR);
 #print("unpacked: ", unpack('message', b'\x01\x02\x03\x04\x05\x06\x07\x08\t\n') )
-for m in messageR:
-    print(m, end=' ')
+# for m in messageR:
+#     print(m, end=' ')
 
 ser.close()
 #print(ser.is_open)
