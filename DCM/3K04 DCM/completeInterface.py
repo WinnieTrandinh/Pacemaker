@@ -6,7 +6,8 @@
 # libraries
 import tkinter as tk
 import random
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
+import numpy as np
 
 # stores information from text files
 class User:
@@ -323,7 +324,13 @@ def menu1(window, i):
     window.destroy()
 
     pacingLabel = tk.Label(pacingModeWindow, text = "Pacing Modes", bg = '#FFB6C1', font = ("Comic Sans MS", 20)).place(x = 150, y = 75, width = 500, height = 50)
-    pacemakerLabel = tk.Label(pacingModeWindow, text = "Pacemaker " + str(pacemakerNumber[i]) +  " Connected", bg = '#00FF00', font = ("Comic Sans MS", 10)).place(x = 550, y = 650, width = 200, height = 50)
+    
+    pacemakerConnected = random.randint(0,1)
+
+    if(pacemakerConnected == 0):
+        pacemakerLabel = tk.Label(pacingModeWindow, text = "Pacemaker " + str(pacemakerNumber[i]) +  " Connected", bg = '#FF0000', font = ("Comic Sans MS", 10)).place(x = 550, y = 650, width = 200, height = 50)
+    elif(pacemakerConnected == 1):
+        pacemakerLabel = tk.Label(pacingModeWindow, text = "Pacemaker " + str(pacemakerNumber[i]) +  " Connected", bg = '#00FF00', font = ("Comic Sans MS", 10)).place(x = 550, y = 650, width = 200, height = 50)
 
     AOOButton = tk.Button(pacingModeWindow, text="AOO", font=("Comic Sans MS", 15),command = lambda:dataValuesAOO(pacingModeWindow, "AOO", "no"))
     AOOButton.place(x = 250, y = 175, width = 300, height = 50)
@@ -518,9 +525,24 @@ def graph(window):
     dualGraphButton.place(x = 830, y = 525, width = 300, height = 50)
 
 def atrGraph(): 
-    atrValues = np.random.normal(200000, 25000, 5000)
-    plt.hist(atrValues, 50)
-    plt.show()
+    # atrValues = np.random.normal(200000, 25000, 5000)
+    # plt.hist(atrValues, 50)
+    # plt.show()
+    m = 100
+    n = 100
+    matrix = np.random.normal(0,1,m*n).reshape(m,n)
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    plt.ion()
+
+    fig.show()
+    fig.canvas.draw()
+
+    for i in range(0,100):
+        ax.clear()
+        ax.plot(matrix[i,:])
+        fig.canvas.draw()
 
 def venGraph(): 
     venValues = np.random.normal(200000, 25000, 5000)
