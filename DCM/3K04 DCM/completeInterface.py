@@ -220,7 +220,7 @@ def signupCheck(signupWindow, name, password, confirmPassword):
     elif(password.get() != confirmPassword.get()):
         incorrectPassLabel = tk.Label(signupWindow, text = "Password Doesn't Match", font = ("Comic Sans MS", 20)).place(x = 150, y = 550, width = 500, height = 50)
     else:
-        user_list.append(User(name.get(), confirmPassword.get()))
+        user_list.append(User(name.get(), confirmPassword.get(), default_AOO, default_VOO, default_AAI, default_VVI, default_DOO, default_DOOR, default_DDDR))
         f = open("pacemaker_users.txt", "a")
         f.write(name.get() + "\n")
         f.close
