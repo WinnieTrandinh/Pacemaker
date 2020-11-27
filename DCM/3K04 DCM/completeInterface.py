@@ -42,8 +42,8 @@ class User:
         self.VVI = new_VVI
     
 # global variables
-user_list = []
 user_id = 0
+user_list = []
 pacemakerNumber = [1234,5453,6789,5809,2354,1765,3490,5692,3745,6890]
 default_AOO = [1000, 1000, 10]
 default_VOO = [1000, 1000, 10]
@@ -106,6 +106,7 @@ with open("pacemaker_DDDR.txt") as i:
 
 for i in range(0, len(names)):
     user_list.append(User(names[i], password_list[i], AOO_list[i], VOO_list[i], AAI_list[i], VVI_list[i], DOO_list[i], DOOR_list[i], DDDR_list[i]))
+
 
 # debugging
 for i in user_list:
@@ -297,7 +298,11 @@ def chooseDisplay(username, password):
             incorrectPassLabel = tk.Label(root, text = "Welcome!", bg = '#FFB6C1', font = ("Comic Sans MS", 20)).place(x = 150, y = 550, width = 500, height = 50)
             flag = 1
             # ********************************************* window demo ***********************************************************
+            
             menu1(tk.Toplevel(root,  height = 0, width = 0, bg = '#FFB6C1'), i)
+
+            global user_id
+            user_id = i
 
             break
 
@@ -390,17 +395,14 @@ def menu3(window, i):
 def changeParameter(i, new_value, window, mode, title, label):
     if (mode == "AOO"):
         user_list[user_id].AOO[i] = new_value.get()
+        
         with open("pacemaker_AOO.txt", "r") as file:
             info = file.readlines()
 
-        for i in range(0, len(user_list[user_id].AOO)):
-            info[user_id] = info[user_id] + (str(user_list[user_id].AOO[i]))
-            
-            if (i != (len(user_list[user_id].AOO) - 1)):
-                info[user_id] = info[user_id] + ", "
+        info[user_id] = ', '.join(user_list[user_id].AOO) + "\n"
 
-        with open('pacemaker_AOO.txt', 'w') as f:
-            f.writelines(info)
+        with open("pacemaker_AOO.txt", "w") as file:
+            file.writelines(info)
 
         dataValuesAOO(window, title, "no")
 
@@ -542,6 +544,8 @@ def dataValuesAOO(oldWin, title, delCom):
     if (delCom == "yes"):
         oldWin.destroy()
 
+    print(user_id)
+    print(user_list[user_id].AOO)
     # Lower Rate
     lowerRateLabel = tk.Label(AOOWindow, text = "Atrial Lower Rate: " + str(user_list[user_id].AOO[0]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=50)
     LRRangeLabel =  tk.Label(AOOWindow, text = "(Range: 343 - 2000 ms)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=85)
