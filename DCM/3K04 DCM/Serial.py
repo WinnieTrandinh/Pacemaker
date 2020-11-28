@@ -1,5 +1,8 @@
 # #########################  Serial use #######################################
 
+# To use: add following command into main file
+#   < from Serial import * >
+
 # *************************  endianness  **************************************
 # endian = little
 # defaults to @ which uses native endian
@@ -191,45 +194,15 @@ class Serial:
         self.ser.close()
 
 
-# ***************************  calls  *****************************************
-
-# open port at start of program
-serial = Serial("COM4");
-
-# update a parameter
-# syntax: updateParam( <paramSelector>, <value> )
-serial.updateParam(18,3)
-
-# when displaying egram, should continuously send request for egram within DCM
-#   pacemaker will not send info unless request message received
-newData = serial.requestEgram()
-
-
-# *****************  debugging purposes  ********************************
-# import serial
-# from struct import *
-# ser=serial.Serial("COM4",115200, timeout = 2)
-# #ser.port='COM4'
-# # print("name: ", ser.name)
-# # print("is open: ", ser.is_open)
-# # print("serial: ", ser)
-
-# messageS = pack('<BBfB', 34, 16, 300, 42)
+# ***********************  example calls  *************************************
 #
-# # print("messageS:     ", messageS)
-# # print("num bytes: ", ser.write(messageS) )
+# # open port at start of program
+# serial = Serial("COM4");
 #
-# messageR_Raw = ser.read(16)
-# try:
-#     messageR = unpack('<BffBfBB', messageR_Raw);
-# except:
-#     print("connection lost")
-#     messageR = [0, 0, 0, 0, 0, 0, 0]
-# if (messageR[0] == 101):
-#     print("message not properly received, please try again")
-
-# # messageR = unpack('<BffBfBB', messageR_Raw);
-# # print("messageR_Raw: ", messageR_Raw)
-# print("messageR:     ", messageR);
-# # for m in messageR:
-# #     print(m, end=' ')
+# # update a parameter
+# # syntax: updateParam( <paramSelector>, <value> )
+# serial.updateParam(18,3)
+#
+# # when displaying egram, should continuously send request for egram within DCM
+# #   pacemaker will not send info unless request message received
+# newData = serial.requestEgram()
