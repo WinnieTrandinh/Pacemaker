@@ -6,7 +6,8 @@
 # libraries
 import tkinter as tk
 import random
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
+import numpy as np
 
 # stores information from text files
 class User:
@@ -42,8 +43,8 @@ class User:
         self.VVI = new_VVI
     
 # global variables
-user_list = []
 user_id = 0
+user_list = []
 pacemakerNumber = [1234,5453,6789,5809,2354,1765,3490,5692,3745,6890]
 default_AOO = [1000, 1000, 10]
 default_VOO = [1000, 1000, 10]
@@ -106,6 +107,7 @@ with open("pacemaker_DDDR.txt") as i:
 
 for i in range(0, len(names)):
     user_list.append(User(names[i], password_list[i], AOO_list[i], VOO_list[i], AAI_list[i], VVI_list[i], DOO_list[i], DOOR_list[i], DDDR_list[i]))
+
 
 # debugging
 for i in user_list:
@@ -297,7 +299,11 @@ def chooseDisplay(username, password):
             incorrectPassLabel = tk.Label(root, text = "Welcome!", bg = '#FFB6C1', font = ("Comic Sans MS", 20)).place(x = 150, y = 550, width = 500, height = 50)
             flag = 1
             # ********************************************* window demo ***********************************************************
+            
             menu1(tk.Toplevel(root,  height = 0, width = 0, bg = '#FFB6C1'), i)
+
+            global user_id
+            user_id = i
 
             break
 
@@ -318,7 +324,13 @@ def menu1(window, i):
     window.destroy()
 
     pacingLabel = tk.Label(pacingModeWindow, text = "Pacing Modes", bg = '#FFB6C1', font = ("Comic Sans MS", 20)).place(x = 150, y = 75, width = 500, height = 50)
-    pacemakerLabel = tk.Label(pacingModeWindow, text = "Pacemaker " + str(pacemakerNumber[i]) +  " Connected", bg = '#00FF00', font = ("Comic Sans MS", 10)).place(x = 550, y = 650, width = 200, height = 50)
+    
+    pacemakerConnected = random.randint(0,1)
+
+    if(pacemakerConnected == 0):
+        pacemakerLabel = tk.Label(pacingModeWindow, text = "Pacemaker " + str(pacemakerNumber[i]) +  " Connected", bg = '#FF0000', font = ("Comic Sans MS", 10)).place(x = 550, y = 650, width = 200, height = 50)
+    elif(pacemakerConnected == 1):
+        pacemakerLabel = tk.Label(pacingModeWindow, text = "Pacemaker " + str(pacemakerNumber[i]) +  " Connected", bg = '#00FF00', font = ("Comic Sans MS", 10)).place(x = 550, y = 650, width = 200, height = 50)
 
     AOOButton = tk.Button(pacingModeWindow, text="AOO", font=("Comic Sans MS", 15),command = lambda:dataValuesAOO(pacingModeWindow, "AOO", "no"))
     AOOButton.place(x = 250, y = 175, width = 300, height = 50)
@@ -390,17 +402,14 @@ def menu3(window, i):
 def changeParameter(i, new_value, window, mode, title, label):
     if (mode == "AOO"):
         user_list[user_id].AOO[i] = new_value.get()
+        
         with open("pacemaker_AOO.txt", "r") as file:
             info = file.readlines()
 
-        for i in range(0, len(user_list[user_id].AOO)):
-            info[user_id] = info[user_id] + (str(user_list[user_id].AOO[i]))
-            
-            if (i != (len(user_list[user_id].AOO) - 1)):
-                info[user_id] = info[user_id] + ", "
+        info[user_id] = ', '.join(user_list[user_id].AOO) + "\n"
 
-        with open('pacemaker_AOO.txt', 'w') as f:
-            f.writelines(info)
+        with open("pacemaker_AOO.txt", "w") as file:
+            file.writelines(info)
 
         dataValuesAOO(window, title, "no")
 
@@ -516,9 +525,24 @@ def graph(window):
     dualGraphButton.place(x = 830, y = 525, width = 300, height = 50)
 
 def atrGraph(): 
-    atrValues = np.random.normal(200000, 25000, 5000)
-    plt.hist(atrValues, 50)
-    plt.show()
+    # atrValues = np.random.normal(200000, 25000, 5000)
+    # plt.hist(atrValues, 50)
+    # plt.show()
+    m = 100
+    n = 100
+    matrix = np.random.normal(0,1,m*n).reshape(m,n)
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    plt.ion()
+
+    fig.show()
+    fig.canvas.draw()
+
+    for i in range(0,100):
+        ax.clear()
+        ax.plot(matrix[i,:])
+        fig.canvas.draw()
 
 def venGraph(): 
     venValues = np.random.normal(200000, 25000, 5000)
@@ -542,6 +566,8 @@ def dataValuesAOO(oldWin, title, delCom):
     if (delCom == "yes"):
         oldWin.destroy()
 
+    print(user_id)
+    print(user_list[user_id].AOO)
     # Lower Rate
     lowerRateLabel = tk.Label(AOOWindow, text = "Atrial Lower Rate: " + str(user_list[user_id].AOO[0]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=50)
     LRRangeLabel =  tk.Label(AOOWindow, text = "(Range: 343 - 2000 ms)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=85)
