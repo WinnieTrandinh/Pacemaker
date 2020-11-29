@@ -61,7 +61,7 @@ default_DOOR = [300]
 default_DDDR = [300]
 
 pacemakerConnected = random.randint(0,1)
-
+serial = Serial("COM4")
 
 
 # stores textfile info in User class object
@@ -517,6 +517,7 @@ def checkParameter(min, max, i, new_value, window, x_in, y_in, mode, title, labe
                 invalidEntry = tk.Label(window, text = "Out of Range",bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x = x_in + 320, y = y_in)
             else:
                 changeParameter(i, new_value, window, mode, title, label)
+                serial.updateParam(paramNumber,new_value)
                 print(mode)
 
         else:
@@ -646,6 +647,11 @@ def dataValuesAOO(oldWin, title, delCom):
 
     print(user_id)
     print(user_list[user_id].AOO)
+
+    serial.updateParam(17,3)
+    serial.updateParam(18,1)
+    serial.updateParam(19,1)
+    serial.updateParam(15,0)
     # Lower Rate
     lowerRateLabel = tk.Label(AOOWindow, text = "Atrial Lower Rate: " + str(user_list[user_id].AOO[0]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=50)
     LRRangeLabel =  tk.Label(AOOWindow, text = "(Range: 343 - 2000 ms)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=85)
@@ -695,6 +701,11 @@ def dataValuesVOO(oldWin, title, delCom):
 
     if (delCom == "yes"):
         oldWin.destroy()
+
+    serial.updateParam(17,3)
+    serial.updateParam(18,1)
+    serial.updateParam(19,2)
+    serial.updateParam(15,0)    
 
     lowerRateLabel = tk.Label(VOOWindow, text = "Ventrical Lower Rate: " + str(user_list[user_id].VOO[0]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=50)
     LRRangeLabel =  tk.Label(VOOWindow, text = "(Range: 343 - 2000 ms)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=85)
@@ -753,6 +764,10 @@ def dataValuesAAI1(oldWin, title, delCom):
         oldWin.destroy()
     
     dataValuesAOO(AAIWindow, title, "yes")
+    serial.updateParam(17,1)
+    serial.updateParam(18,2)
+    serial.updateParam(19,1)
+    serial.updateParam(15,0)
 
 def dataValuesAAI2(oldWin, title, delCom):
     if (delCom == "yes"):
@@ -762,6 +777,11 @@ def dataValuesAAI2(oldWin, title, delCom):
     AAIWindow.title(title)
 
     graph(AAIWindow)
+
+    serial.updateParam(17,1)
+    serial.updateParam(18,2)
+    serial.updateParam(19,1)
+    serial.updateParam(15,0)
 
     # ARP
     ARPLabel = tk.Label(AAIWindow, text = "ARP: " + str(user_list[user_id].AAI[0]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=200)
@@ -809,6 +829,11 @@ def dataValuesVVI1(oldWin, title, delCom):
     
     dataValuesVOO(VVIWindow, title, "yes")
 
+    serial.updateParam(17,2)
+    serial.updateParam(18,2)
+    serial.updateParam(19,2)
+    serial.updateParam(15,0)
+
 def dataValuesVVI2(oldWin, title, delCom):
     if (delCom == "yes"):
         oldWin.destroy()
@@ -817,6 +842,11 @@ def dataValuesVVI2(oldWin, title, delCom):
     VVIWindow.title(title)
 
     graph(VVIWindow)
+
+    serial.updateParam(17,2)
+    serial.updateParam(18,2)
+    serial.updateParam(19,2)
+    serial.updateParam(15,0)
 
     # VRP
     VRPLabel = tk.Label(VVIWindow, text = "VRP: " + str(user_list[user_id].VVI[0]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=200)
@@ -857,6 +887,11 @@ def dataValuesDOO1(oldWin, title, delCom):
 
     if (delCom == "yes"):
         oldWin.destroy()
+
+    serial.updateParam(17,3)
+    serial.updateParam(18,1)
+    serial.updateParam(19,1)
+    serial.updateParam(15,0)
     
     # Maximum Sensor Rate Limit
     maxSenLabel= tk.Label(DOOWindow, text = "Maximum Sensor Rate Limit: " + str(user_list[user_id].DOO[0]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=50)
@@ -926,6 +961,11 @@ def dataValuesDOO2(oldWin, title, delCom):
 
     graph(DOOWindow)
 
+    serial.updateParam(17,3)
+    serial.updateParam(18,1)
+    serial.updateParam(19,1)
+    serial.updateParam(15,0)
+
     # response
     responseLabel = tk.Label(DOOWindow, text = "Response Factor: " + str(user_list[user_id].DOO[3]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=200)
     responseLabel =  tk.Label(DOOWindow, text = "(Range: 1-16)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=235)
@@ -969,11 +1009,21 @@ def dataValuesAOOR1(oldWin, title, delCom):
     
     dataValuesAOO(tk.Toplevel(root,  height = root.winfo_screenheight(), width = root.winfo_screenwidth(), bg = '#FFB6C1'), title, "yes")
 
+    serial.updateParam(17,3)
+    serial.updateParam(18,1)
+    serial.updateParam(19,1)
+    serial.updateParam(15,1)
+
 def dataValuesVOOR1(oldWin, title, delCom):
     if (delCom == "yes"):
         oldWin.destroy()
     
     dataValuesVOO(tk.Toplevel(root,  height = root.winfo_screenheight(), width = root.winfo_screenwidth(), bg = '#FFB6C1'), title, "yes")
+
+    serial.updateParam(17,3)
+    serial.updateParam(18,1)
+    serial.updateParam(19,2)
+    serial.updateParam(15,1)
 
 def dataValuesAAIR1(oldWin, title, delCom):
     if (delCom == "yes"):
@@ -981,11 +1031,21 @@ def dataValuesAAIR1(oldWin, title, delCom):
     
     dataValuesAAI1(tk.Toplevel(root,  height = root.winfo_screenheight(), width = root.winfo_screenwidth(), bg = '#FFB6C1'), title, "yes")
 
+    serial.updateParam(17,1)
+    serial.updateParam(18,2)
+    serial.updateParam(19,1)
+    serial.updateParam(15,1)
+
 def dataValuesVVIR1(oldWin, title, delCom):
     if (delCom == "yes"):
         oldWin.destroy()
     
     dataValuesVVI1(tk.Toplevel(root,  height = root.winfo_screenheight(), width = root.winfo_screenwidth(), bg = '#FFB6C1'), title, "yes")
+
+    serial.updateParam(17,2)
+    serial.updateParam(18,2)
+    serial.updateParam(19,2)
+    serial.updateParam(15,1)
 
 def dataValuesDOOR(oldWin, title, delCom):
     if (delCom == "yes"):
@@ -993,6 +1053,10 @@ def dataValuesDOOR(oldWin, title, delCom):
     
     dataValuesAOO(tk.Toplevel(root,  height = root.winfo_screenheight(), width = root.winfo_screenwidth(), bg = '#FFB6C1'), title, "yes")
 
+    serial.updateParam(17,3)
+    serial.updateParam(18,1)
+    serial.updateParam(19,1)
+    serial.updateParam(15,1)
 def dataValuesDOOR2(oldWin, title, delCom):
     if (delCom == "yes"):
         oldWin.destroy()
@@ -1001,6 +1065,11 @@ def dataValuesDOOR2(oldWin, title, delCom):
     DOORWindow.title(title)
 
     graph(DOORWindow)
+
+    serial.updateParam(17,3)
+    serial.updateParam(18,1)
+    serial.updateParam(19,1)
+    serial.updateParam(15,1)
 
     responseLabel = tk.Label(DOORWindow, text = "Fixed Atrial Ventrical (AV) Delay: " + str(user_list[user_id].DOOR[0]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=200)
     responseLabel =  tk.Label(DOORWindow, text ="(Range: 70-300 ms)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=235)
@@ -1020,6 +1089,11 @@ def dataValuesDDDR(oldWin, title, delCom):
     
     dataValuesAAI1(tk.Toplevel(root,  height = root.winfo_screenheight(), width = root.winfo_screenwidth(), bg = '#FFB6C1'), title, "yes")
 
+    serial.updateParam(17,3)
+    serial.updateParam(18,3)
+    serial.updateParam(19,3)
+    serial.updateParam(15,1)
+    
 def dataValuesDDDR2(oldWin, title, delCom):
     if (delCom == "yes"):
         oldWin.destroy()
@@ -1028,6 +1102,11 @@ def dataValuesDDDR2(oldWin, title, delCom):
     DDDRWindow.title(title)
 
     graph(DDDRWindow)
+
+    serial.updateParam(17,3)
+    serial.updateParam(18,3)
+    serial.updateParam(19,3)
+    serial.updateParam(15,1)
 
     responseLabel = tk.Label(DDDRWindow, text = "RVARP: " + str(user_list[user_id].DDDR[0]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=200)
     responseLabel =  tk.Label(DDDRWindow, text ="(Range: 150 - 500 ms)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=235)
