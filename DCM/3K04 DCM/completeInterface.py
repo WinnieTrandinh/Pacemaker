@@ -60,9 +60,8 @@ default_DOO = [500, 1.0, 20, 8, 500]
 default_DOOR = [300]
 default_DDDR = [300]
 
-xData = []
-yData = []
-ind = count()
+pacemakerConnected = random.randint(0,1)
+
 
 
 # stores textfile info in User class object
@@ -336,8 +335,7 @@ def menu1(window, i):
 
     pacingLabel = tk.Label(pacingModeWindow, text = "Pacing Modes", bg = '#FFB6C1', font = ("Comic Sans MS", 20)).place(x = 150, y = 75, width = 500, height = 50)
     
-    pacemakerConnected = random.randint(0,1)
-
+    
     if(pacemakerConnected == 0):
         pacemakerLabel = tk.Label(pacingModeWindow, text = "Pacemaker " + str(pacemakerNumber[i]) +  " Connected", bg = '#FF0000', font = ("Comic Sans MS", 10)).place(x = 550, y = 650, width = 200, height = 50)
     elif(pacemakerConnected == 1):
@@ -370,8 +368,10 @@ def menu2(window, i):
     window.destroy()
 
     pacingLabel = tk.Label(pacingModeWindow, text = "Pacing Modes", bg = '#FFB6C1', font = ("Comic Sans MS", 20)).place(x = 150, y = 75, width = 500, height = 50)
-    pacemakerLabel = tk.Label(pacingModeWindow, text = "Pacemaker " + str(pacemakerNumber[i]) +  " Connected", bg = '#00FF00', font = ("Comic Sans MS", 10)).place(x = 550, y = 650, width = 200, height = 50)
-
+    if(pacemakerConnected == 0):
+        pacemakerLabel = tk.Label(pacingModeWindow, text = "Pacemaker " + str(pacemakerNumber[i]) +  " Connected", bg = '#FF0000', font = ("Comic Sans MS", 10)).place(x = 550, y = 650, width = 200, height = 50)
+    elif(pacemakerConnected == 1):
+        pacemakerLabel = tk.Label(pacingModeWindow, text = "Pacemaker " + str(pacemakerNumber[i]) +  " Connected", bg = '#00FF00', font = ("Comic Sans MS", 10)).place(x = 550, y = 650, width = 200, height = 50)
     AOOButton = tk.Button(pacingModeWindow, text="AOOR", font=("Comic Sans MS", 15),command = lambda:dataValuesAOOR1(pacingModeWindow, "AOOR", "no"))
     AOOButton.place(x = 250, y = 175, width = 300, height = 50)
 
@@ -402,8 +402,11 @@ def menu3(window, i):
     window.destroy()
 
     pacingLabel = tk.Label(pacingModeWindow, text = "Pacing Modes", bg = '#FFB6C1', font = ("Comic Sans MS", 20)).place(x = 150, y = 75, width = 500, height = 50)
-    pacemakerLabel = tk.Label(pacingModeWindow, text = "Pacemaker " + str(pacemakerNumber[i]) +  " Connected", bg = '#00FF00', font = ("Comic Sans MS", 10)).place(x = 550, y = 650, width = 200, height = 50)
-
+    if(pacemakerConnected == 0):
+        pacemakerLabel = tk.Label(pacingModeWindow, text = "Pacemaker " + str(pacemakerNumber[i]) +  " Connected", bg = '#FF0000', font = ("Comic Sans MS", 10)).place(x = 550, y = 650, width = 200, height = 50)
+    elif(pacemakerConnected == 1):
+        pacemakerLabel = tk.Label(pacingModeWindow, text = "Pacemaker " + str(pacemakerNumber[i]) +  " Connected", bg = '#00FF00', font = ("Comic Sans MS", 10)).place(x = 550, y = 650, width = 200, height = 50)
+   
     AOOButton = tk.Button(pacingModeWindow, text="DDDR", font=("Comic Sans MS", 15),command = lambda:dataValuesDDDR(pacingModeWindow, "DDDR", "no"))
     AOOButton.place(x = 250, y = 175, width = 300, height = 50) 
 
@@ -507,7 +510,7 @@ def changeParameter(i, new_value, window, mode, title, label):
 
     window.destroy()
 
-def checkParameter(min, max, i, new_value, window, x_in, y_in, mode, title, label):
+def checkParameter(min, max, i, new_value, window, x_in, y_in, mode, title, label, paramNumber):
     try:
         if (mode == "DOO" and i == 1):
             if (float(new_value.get()) > max or float(new_value.get()) < min):
@@ -521,6 +524,8 @@ def checkParameter(min, max, i, new_value, window, x_in, y_in, mode, title, labe
                 invalidEntry = tk.Label(window, text = "Out of Range",bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x = x_in + 320, y = y_in)
             else:
                 changeParameter(i, new_value, window, mode, title, label)
+                serial.updateParam(paramNumber,new_value)
+
     except ValueError:
         invalidEntry = tk.Label(window, text = "Invalid Entry",bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x = x_in + 320, y = y_in)
 
@@ -648,7 +653,7 @@ def dataValuesAOO(oldWin, title, delCom):
     lowerRateEntry_1 = tk.Entry(AOOWindow, font=("Comic Sans MS", 20))
     lowerRateEntry_1.place(x = 50, y = 140, width = 500, height = 50)
 
-    lowerRateChangeButton = tk.Button(AOOWindow, text="Change", font=("Comic Sans MS", 15), command = lambda:checkParameter(343, 2000, 0, lowerRateEntry_1, AOOWindow, 50, 215, "AOO", title, lowerRateLabel))
+    lowerRateChangeButton = tk.Button(AOOWindow, text="Change", font=("Comic Sans MS", 15), command = lambda:checkParameter(343, 2000, 0, lowerRateEntry_1, AOOWindow, 50, 215, "AOO", title, lowerRateLabel, 1))
     lowerRateChangeButton.place(x = 50, y = 215, width = 300, height = 50)
 
     # Atrial Amplitude
@@ -658,7 +663,7 @@ def dataValuesAOO(oldWin, title, delCom):
     amplitudeEntry = tk.Entry(AOOWindow, font=("Comic Sans MS", 20))
     amplitudeEntry.place(x = 50, y = 400, width = 500, height = 50)
 
-    amplitudeChangeButton = tk.Button(AOOWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(500, 5000, 1, amplitudeEntry, AOOWindow, 50, 475, "AOO", title, amplitudeLabel))
+    amplitudeChangeButton = tk.Button(AOOWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(500, 5000, 1, amplitudeEntry, AOOWindow, 50, 475, "AOO", title, amplitudeLabel, 2))
     amplitudeChangeButton.place(x = 50, y = 475, width = 300, height = 50)
 
     # Atrial Pulse Width
@@ -668,7 +673,7 @@ def dataValuesAOO(oldWin, title, delCom):
     pWEntry = tk.Entry(AOOWindow, font=("Comic Sans MS", 20))
     pWEntry.place(x = 50, y = 675, width = 500, height = 50)
 
-    pwEntryChangeButton = tk.Button(AOOWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(1, 30, 2, pWEntry, AOOWindow, 50, 750, "AOO", title, pWLabel))
+    pwEntryChangeButton = tk.Button(AOOWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(1, 30, 2, pWEntry, AOOWindow, 50, 750, "AOO", title, pWLabel, 3))
     pwEntryChangeButton.place(x = 50, y = 750, width = 300, height = 50)
     
     # Switch Button for AAI Window
@@ -697,27 +702,27 @@ def dataValuesVOO(oldWin, title, delCom):
     lowerRateEntry_1 = tk.Entry(VOOWindow, font=("Comic Sans MS", 20))
     lowerRateEntry_1.place(x = 50, y = 140, width = 500, height = 50)
 
-    lowerRateChangeButton = tk.Button(VOOWindow, text="Change", font=("Comic Sans MS", 15), command = lambda:checkParameter(343, 2000, 0, lowerRateEntry_1, VOOWindow, 50, 215, "VOO", title, lowerRateLabel))
+    lowerRateChangeButton = tk.Button(VOOWindow, text="Change", font=("Comic Sans MS", 15), command = lambda:checkParameter(343, 2000, 0, lowerRateEntry_1, VOOWindow, 50, 215, "VOO", title, lowerRateLabel,1))
     lowerRateChangeButton.place(x = 50, y = 215, width = 300, height = 50)
 
-    # Atrial Amplitude
+    # Ventricle Amplitude
     amplitudeLabel = tk.Label(VOOWindow, text = "Ventrical Amplitude: " + str(user_list[user_id].VOO[1]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=325)
     amplitudeRangeLabel =  tk.Label(VOOWindow, text = "(Range: 500-5000mV)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=360)
 
     amplitudeEntry = tk.Entry(VOOWindow, font=("Comic Sans MS", 20))
     amplitudeEntry.place(x = 50, y = 400, width = 500, height = 50)
 
-    amplitudeChangeButton = tk.Button(VOOWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(500, 5000, 1, amplitudeEntry, VOOWindow, 50, 475, "VOO", title, amplitudeLabel))
+    amplitudeChangeButton = tk.Button(VOOWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(500, 5000, 1, amplitudeEntry, VOOWindow, 50, 475, "VOO", title, amplitudeLabel,4))
     amplitudeChangeButton.place(x = 50, y = 475, width = 300, height = 50)
 
-    # Atrial Pulse Width
+    # Ventricle Pulse Width
     pWLabel = tk.Label(VOOWindow, text = "Ventrical Pulse Width: " + str(user_list[user_id].VOO[2]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=600)
     pWLabel =  tk.Label(VOOWindow, text = "(Range: 1-30ms)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=635)
 
     pWEntry = tk.Entry(VOOWindow, font=("Comic Sans MS", 20))
     pWEntry.place(x = 50, y = 675, width = 500, height = 50)
 
-    pwEntryChangeButton = tk.Button(VOOWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(1, 30, 2, pWEntry, VOOWindow, 50, 750, "VOO", title, pWLabel))
+    pwEntryChangeButton = tk.Button(VOOWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(1, 30, 2, pWEntry, VOOWindow, 50, 750, "VOO", title, pWLabel,5))
     pwEntryChangeButton.place(x = 50, y = 750, width = 300, height = 50)
 
     # Switch Button for AAI Window
@@ -765,7 +770,7 @@ def dataValuesAAI2(oldWin, title, delCom):
     ARPEntry = tk.Entry(AAIWindow, font=("Comic Sans MS", 20))
     ARPEntry.place(x = 50, y = 275, width = 500, height = 50)
 
-    ARPEntryChangeButton_2 = tk.Button(AAIWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(150, 500, 0, ARPEntry, AAIWindow, 50, 350, "AAI", title, ARPLabel))
+    ARPEntryChangeButton_2 = tk.Button(AAIWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(150, 500, 0, ARPEntry, AAIWindow, 50, 350, "AAI", title, ARPLabel, 7))
     ARPEntryChangeButton_2.place(x = 50, y = 350, width = 300, height = 50)
     
     # ASensitivity
@@ -775,7 +780,7 @@ def dataValuesAAI2(oldWin, title, delCom):
     A_sensEntry = tk.Entry(AAIWindow, font=("Comic Sans MS", 20))
     A_sensEntry.place(x = 50, y = 550, width = 500, height = 50)
 
-    A_sensEntryChangeButton_2 = tk.Button(AAIWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(3000, 5000, 1, A_sensEntry, AAIWindow, 50, 635, "AAI", title, A_sensLabel))
+    A_sensEntryChangeButton_2 = tk.Button(AAIWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(3000, 5000, 1, A_sensEntry, AAIWindow, 50, 635, "AAI", title, A_sensLabel,8))
     A_sensEntryChangeButton_2.place(x = 50, y = 635, width = 300, height = 50)
 
     # goes to previous window
@@ -820,7 +825,7 @@ def dataValuesVVI2(oldWin, title, delCom):
     VRPEntry = tk.Entry(VVIWindow, font=("Comic Sans MS", 20))
     VRPEntry.place(x = 50, y = 275, width = 500, height = 50)
 
-    VRPEntryChangeButton_2 = tk.Button(VVIWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(150, 500, 0, VRPEntry, VVIWindow, 50, 350, "VVI", title, VRPLabel))
+    VRPEntryChangeButton_2 = tk.Button(VVIWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(150, 500, 0, VRPEntry, VVIWindow, 50, 350, "VVI", title, VRPLabel,7))
     VRPEntryChangeButton_2.place(x = 50, y = 350, width = 300, height = 50)
     
     # ASensitivity
@@ -830,7 +835,7 @@ def dataValuesVVI2(oldWin, title, delCom):
     V_sensEntry = tk.Entry(VVIWindow, font=("Comic Sans MS", 20))
     V_sensEntry.place(x = 50, y = 550, width = 500, height = 50)
 
-    V_sensEntryChangeButton_2 = tk.Button(VVIWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(3000, 5000, 1, V_sensEntry, VVIWindow, 50, 635, "VVI", title, V_sensLabel))
+    V_sensEntryChangeButton_2 = tk.Button(VVIWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(3000, 5000, 1, V_sensEntry, VVIWindow, 50, 635, "VVI", title, V_sensLabel,9))
     V_sensEntryChangeButton_2.place(x = 50, y = 635, width = 300, height = 50)
 
     if (title == "VVIR" or title == "DDDR"):
@@ -860,7 +865,7 @@ def dataValuesDOO1(oldWin, title, delCom):
     maxSenEntry = tk.Entry(DOOWindow, font=("Comic Sans MS", 20))
     maxSenEntry.place(x = 50, y = 140, width = 500, height = 50)
 
-    maxSenChangeButton = tk.Button(DOOWindow, text="Change", font=("Comic Sans MS", 15), command = lambda:checkParameter(343, 1200, 0, maxSenEntry, DOOWindow, 50, 215, "DOO", title, maxSenLabel))
+    maxSenChangeButton = tk.Button(DOOWindow, text="Change", font=("Comic Sans MS", 15), command = lambda:checkParameter(343, 1200, 0, maxSenEntry, DOOWindow, 50, 215, "DOO", title, maxSenLabel,10))
     maxSenChangeButton.place(x = 50, y = 215, width = 300, height = 50)
 
     # Activity Threshold
@@ -870,7 +875,7 @@ def dataValuesDOO1(oldWin, title, delCom):
     actEntry = tk.Entry(DOOWindow, font=("Comic Sans MS", 20))
     actEntry.place(x = 50, y = 400, width = 500, height = 50)
 
-    actChangeButton = tk.Button(DOOWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(0.05, 1.5, 1, actEntry, DOOWindow, 50, 475, "DOO", title, actLabel))
+    actChangeButton = tk.Button(DOOWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(0.05, 1.5, 1, actEntry, DOOWindow, 50, 475, "DOO", title, actLabel,11))
     actChangeButton.place(x = 50, y = 475, width = 300, height = 50)
 
     # Reaction Time
@@ -880,7 +885,7 @@ def dataValuesDOO1(oldWin, title, delCom):
     reactEntry = tk.Entry(DOOWindow, font=("Comic Sans MS", 20))
     reactEntry.place(x = 50, y = 675, width = 500, height = 50)
 
-    reactEntryChangeButton = tk.Button(DOOWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(1, 30, 2, reactEntry, DOOWindow, 50, 750, "DOO", title, reactLabel))
+    reactEntryChangeButton = tk.Button(DOOWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(1, 30, 2, reactEntry, DOOWindow, 50, 750, "DOO", title, reactLabel,13))
     reactEntryChangeButton.place(x = 50, y = 750, width = 300, height = 50)
 
     if (title == "AOOR"):
@@ -928,7 +933,7 @@ def dataValuesDOO2(oldWin, title, delCom):
     responseEntry = tk.Entry(DOOWindow, font=("Comic Sans MS", 20))
     responseEntry.place(x = 50, y = 275, width = 500, height = 50)
 
-    responseEntryChangeButton_2 = tk.Button(DOOWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(1, 16, 3, responseEntry, DOOWindow, 50, 350, "DOO", title, responseLabel))
+    responseEntryChangeButton_2 = tk.Button(DOOWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(1, 16, 3, responseEntry, DOOWindow, 50, 350, "DOO", title, responseLabel,12))
     responseEntryChangeButton_2.place(x = 50, y = 350, width = 300, height = 50)
     
     # ASensitivity
@@ -938,7 +943,7 @@ def dataValuesDOO2(oldWin, title, delCom):
     recovEntry = tk.Entry(DOOWindow, font=("Comic Sans MS", 20))
     recovEntry.place(x = 50, y = 550, width = 500, height = 50)
 
-    recovEntryChangeButton_2 = tk.Button(DOOWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(120, 960, 4, recovEntry, DOOWindow, 50, 635, "DOO", title, recovLabel))
+    recovEntryChangeButton_2 = tk.Button(DOOWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(120, 960, 4, recovEntry, DOOWindow, 50, 635, "DOO", title, recovLabel,14))
     recovEntryChangeButton_2.place(x = 50, y = 635, width = 300, height = 50)
 
     # goes to previous window
@@ -1003,7 +1008,7 @@ def dataValuesDOOR2(oldWin, title, delCom):
     responseEntry = tk.Entry(DOORWindow, font=("Comic Sans MS", 20))
     responseEntry.place(x = 50, y = 275, width = 500, height = 50)
 
-    responseEntryChangeButton = tk.Button(DOORWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(70, 300, 0, responseEntry, DOORWindow, 50, 215, "DOOR", title, responseLabel))
+    responseEntryChangeButton = tk.Button(DOORWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(70, 300, 0, responseEntry, DOORWindow, 50, 215, "DOOR", title, responseLabel,12))
     responseEntryChangeButton.place(x = 50, y = 350, width = 300, height = 50)
 
     switchButton2 = tk.Button(DOORWindow, text = "Previous Page", font = ("Comic Sans MS", 15), command = lambda: dataValuesDOO2(DOORWindow, title, "yes"))
@@ -1030,7 +1035,7 @@ def dataValuesDDDR2(oldWin, title, delCom):
     responseEntry = tk.Entry(DDDRWindow, font=("Comic Sans MS", 20))
     responseEntry.place(x = 50, y = 275, width = 500, height = 50)
 
-    responseEntryChangeButton = tk.Button(DDDRWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(150, 500, 0, responseEntry, DDDRWindow, 50, 215, "DDDR", title, responseLabel))
+    responseEntryChangeButton = tk.Button(DDDRWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(150, 500, 0, responseEntry, DDDRWindow, 50, 215, "DDDR", title, responseLabel,12))
     responseEntryChangeButton.place(x = 50, y = 350, width = 300, height = 50)
 
     switchButton2 = tk.Button(DDDRWindow, text = "Previous Page", font = ("Comic Sans MS", 15), command = lambda: dataValuesDOO2(DDDRWindow, title, "yes"))
