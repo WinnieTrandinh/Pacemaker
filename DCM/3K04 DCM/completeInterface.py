@@ -8,6 +8,12 @@ import tkinter as tk
 import random
 import matplotlib.pyplot as plt
 import numpy as np
+from Serial import *
+from itertools import count
+from matplotlib.animation import FuncAnimation
+import time
+
+
 
 # stores information from text files
 class User:
@@ -53,6 +59,11 @@ default_VVI = [400, 3500]
 default_DOO = [500, 1.0, 20, 8, 500]
 default_DOOR = [300]
 default_DDDR = [300]
+
+xData = []
+yData = []
+ind = count()
+
 
 # stores textfile info in User class object
 with open("pacemaker_users.txt") as i:
@@ -515,7 +526,7 @@ def checkParameter(min, max, i, new_value, window, x_in, y_in, mode, title, labe
 
 def graph(window):
     #This part goes in the chooseDisplay function where the other buttons are
-    atrGraphButton = tk.Button(window, text="Atrium Graph", font=("Comic Sans MS", 15),command = lambda:atrGraph())
+    atrGraphButton = tk.Button(window, text="Atrium Graph", font=("Comic Sans MS", 15),command = lambda:pulse())
     atrGraphButton.place(x = 830, y = 325, width = 300, height = 50)
                 
     venGraphButton = tk.Button(window, text="Ventricle Graph", font=("Comic Sans MS", 15),command = lambda:venGraph())
@@ -524,25 +535,87 @@ def graph(window):
     dualGraphButton = tk.Button(window, text="Display Both Graphs", font=("Comic Sans MS", 15),command = lambda:dualGraph())
     dualGraphButton.place(x = 830, y = 525, width = 300, height = 50)
 
-def atrGraph(): 
-    # atrValues = np.random.normal(200000, 25000, 5000)
-    # plt.hist(atrValues, 50)
-    # plt.show()
-    m = 100
-    n = 100
-    matrix = np.random.normal(0,1,m*n).reshape(m,n)
+def randValues(arr):
+    i = 0
+    while i < 8:
+        i = i + 1
+        arr.append(random.randint(0,1))
+   
+    # counter = 0
+    # while counter < 10:
+    #     counter = counter + 1
+    #for i in range(7):
+    # i = 0
+    # i = i + 1
+    # if(i == 0):
+    #     # arr.append(85)
+    #     arr.append(random.randint(0,1))
+    # elif(i == 1):
+    #     # arr.append(next(ind))
+    #     arr.append(random.randint(0,1))
+    # elif(i == 2):
+    #     arr.append(random.randint(0,1))
+    # elif(i == 3):
+    #     # arr.append(1)
+    #     arr.append(random.randint(0,1))
+    # elif(i == 4):
+    #     arr.append(random.randint(0,1))
+    # elif(i == 5):
+    #     # arr.append(1)
+    #     arr.append(random.randint(0,1))
+    # elif(i == 6):
+    #     # arr.append(42)
+    #     arr.append(random.randint(0,1))
+    # if(i == 6):
+    #     i = 0
 
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
-    plt.ion()
 
-    fig.show()
-    fig.canvas.draw()
 
-    for i in range(0,100):
-        ax.clear()
-        ax.plot(matrix[i,:])
-        fig.canvas.draw()
+
+
+def pulse():
+    data = [0]*100
+    pointer = 0
+
+    
+    for i in range(100):
+        newData = []
+        randValues(newData)
+        # newData = serial.requestEgram()
+        print(newData)
+        time = newData[1]
+        signal = newData[2]
+
+        data[pointer] = newData
+        pointer = pointer + 1
+
+        if(pointer > len(data) - 1):
+            pointer = 0
+        plt.plot(time,signal)
+        
+        # ax.clear()
+        # ax.plot(time,signal)
+        
+        # fig.canvas.draw()
+    
+    plt.show()
+    
+
+
+def atrGraph():
+    atrAni = FuncAnimation(plt.gcf(),pulse, interval = 100)
+#     # plt.tight_layout()
+#     # plt.show()
+#     # fig = plt.figure()
+#     # ax = fig.add_subplot(111)
+#     # plt.ion()
+    # fig.show()
+    # fig.canvas.draw()
+    # for i in range(0,10):
+    #     ax.clear()
+    #     ax.plot(matrix[i,:])
+    #     fig.canvas.draw()
+    
 
 def venGraph(): 
     venValues = np.random.normal(200000, 25000, 5000)
