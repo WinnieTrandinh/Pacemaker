@@ -92,9 +92,6 @@ def read_file(fileName):
     return out
 
 
-    if (response[0] == 0):
-        connectOrNot = False
-
 # debugging
 for i in user_list:
     print(i.name + i.password)
@@ -763,7 +760,7 @@ def LRL(window, title):
     lowerRateEntry = tk.Entry(window, font=("Comic Sans MS", 20))
     lowerRateEntry.place(x = 50, y = 140, width = 500, height = 50)
 
-    lowerRateChangeButton = tk.Button(window, text="Change", font=("Comic Sans MS", 15), command = lambda:checkParameter(343, 2000, 0, lowerRateEntry, window, 50, 215, "LRL", title, lowerRateLabel))
+    lowerRateChangeButton = tk.Button(window, text="Change", font=("Comic Sans MS", 15), command = lambda:checkParameter(343, 2000, 0, lowerRateEntry, window, 50, 215, "LRL", title, lowerRateLabel, 1))
     lowerRateChangeButton.place(x = 50, y = 215, width = 300, height = 50)
 
 def hys(window, title):
@@ -774,7 +771,7 @@ def hys(window, title):
     hysRateEntry = tk.Entry(window, font=("Comic Sans MS", 20))
     hysRateEntry.place(x = 50, y = 140, width = 500, height = 50)
 
-    hysRateChangeButton = tk.Button(window, text="Change", font=("Comic Sans MS", 15), command = lambda:checkParameter(343, 2000, 0, hysRateEntry, window, 50, 215, "hys", title, hysLabel))
+    hysRateChangeButton = tk.Button(window, text="Change", font=("Comic Sans MS", 15), command = lambda:checkParameter(343, 2000, 0, hysRateEntry, window, 50, 215, "hys", title, hysLabel, 6))
     hysRateChangeButton.place(x = 50, y = 215, width = 300, height = 50)
 
 def dataValuesAOO(oldWin, title, delCom):
@@ -841,17 +838,6 @@ def dataValuesVOO(oldWin, title, delCom):
     connection(18,1)
     connection(19,2)
     connection(15,0)
-
-    '''
-    lowerRateLabel = tk.Label(VOOWindow, text = "Ventrical Lower Rate: " + str(user_list[user_id].VOO[0]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=50)
-    LRRangeLabel =  tk.Label(VOOWindow, text = "(Range: 343 - 2000 ms)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=85)
-
-    lowerRateEntry_1 = tk.Entry(VOOWindow, font=("Comic Sans MS", 20))
-    lowerRateEntry_1.place(x = 50, y = 140, width = 500, height = 50)
-
-    lowerRateChangeButton = tk.Button(VOOWindow, text="Change", font=("Comic Sans MS", 15), command = lambda:checkParameter(343, 2000, 0, lowerRateEntry_1, VOOWindow, 50, 215, "VOO", title, lowerRateLabel,1))
-    lowerRateChangeButton.place(x = 50, y = 215, width = 300, height = 50)
-    '''
 
     # Lower Rate Limit
     LRL(VOOWindow, title)
@@ -932,11 +918,9 @@ def dataValuesAAI2(oldWin, title, delCom):
     ARPEntry = tk.Entry(AAIWindow, font=("Comic Sans MS", 20))
     ARPEntry.place(x = 50, y = 400, width = 500, height = 50)
 
-    ARPEntryChangeButton_2 = tk.Button(AAIWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(150, 500, 0, ARPEntry, AAIWindow, 50, 475, "AAI", title, ARPLabel))
+    ARPEntryChangeButton_2 = tk.Button(AAIWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(150, 500, 0, ARPEntry, AAIWindow, 50, 475, "AAI", title, ARPLabel, 7))
     ARPEntryChangeButton_2.place(x = 50, y = 475, width = 300, height = 50)
 
-    ARPEntryChangeButton_2 = tk.Button(AAIWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(150, 500, 0, ARPEntry, AAIWindow, 50, 350, "AAI", title, ARPLabel, 7))
-    ARPEntryChangeButton_2.place(x = 50, y = 350, width = 300, height = 50)
 
     # ASensitivity
     A_sensLabel = tk.Label(AAIWindow, text = "Atrial Sensitivity: " + str(user_list[user_id].AAI[1]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=600)
@@ -946,7 +930,7 @@ def dataValuesAAI2(oldWin, title, delCom):
     A_sensEntry.place(x = 50, y = 675, width = 500, height = 50)
 
     A_sensEntryChangeButton_2 = tk.Button(AAIWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(3000, 5000, 1, A_sensEntry, AAIWindow, 50, 635, "AAI", title, A_sensLabel,8))
-    A_sensEntryChangeButton_2.place(x = 50, y = 635, width = 300, height = 50)
+    A_sensEntryChangeButton_2.place(x = 50, y = 750, width = 300, height = 50)
 
     # goes to previous window
     if (title == 'AAIR'):
