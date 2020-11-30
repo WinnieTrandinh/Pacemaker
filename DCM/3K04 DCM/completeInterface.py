@@ -6,6 +6,7 @@
 # libraries
 import tkinter as tk
 import random
+<<<<<<< Updated upstream
 import matplotlib.pyplot as plt
 import numpy as np
 from Serial import *
@@ -13,18 +14,25 @@ from itertools import count
 from matplotlib.animation import FuncAnimation
 import time
 
+=======
+#import matplotlib.pyplot as plt
+#import numpy as np
+#from Serial import *
+>>>>>>> Stashed changes
 
 
 # stores information from text files
 class User:
-    def __init__(self, name, password, AOO, VOO, AAI, VVI, DOO, DOOR, DDDR):
+    def __init__(self, name, password, AOO, VOO, LRL, AAI, VVI, hys, DOO, DOOR, DDDR):
         # FIELDS
         self.name = name
         self.password = password
         self.AOO = AOO
         self.VOO = VOO
+        self.LRL = LRL
         self.AAI = AAI
         self.VVI = VVI
+        self.hys = hys
         self.DOO = DOO
         self.DOOR = DOOR
         self.DDDR = DDDR
@@ -52,18 +60,24 @@ class User:
 user_id = 0
 user_list = []
 pacemakerNumber = [1234,5453,6789,5809,2354,1765,3490,5692,3745,6890]
-default_AOO = [1000, 1000, 10]
-default_VOO = [1000, 1000, 10]
-default_AAI = [400, 3500]
-default_VVI = [400, 3500]
-default_DOO = [500, 1.0, 20, 8, 500]
+default_AOO = [1000,10]
+default_VOO = [1000, 10]
+default_LRL = [1000]
+default_hys = [4000]
+default_AAI = [400, 0.5]
+default_VVI = [3.5]
+default_DOO = [500, 0.1 , 20, 8, 500]
 default_DOOR = [300]
 default_DDDR = [300]
 
+<<<<<<< Updated upstream
 pacemakerConnected = random.randint(0,1)
 serial = Serial("COM4")
 
 
+=======
+connectOrNot = True
+>>>>>>> Stashed changes
 # stores textfile info in User class object
 with open("pacemaker_users.txt") as i:
     names = i.readlines()
@@ -73,50 +87,52 @@ with open("pacemaker_passwords.txt") as i:
     password_list = i.readlines()
     password_list = [x.strip() for x in password_list]
 
-with open("pacemaker_AOO.txt") as i:
-    AOO_list = i.readlines()
+def read_file(fileName):
+    out = []
 
-    for i in range(0, len(AOO_list)):
-        AOO_list[i] = list(AOO_list[i].split(", "))
+    with open(fileName) as i:
+        out = i.readlines()
 
-with open("pacemaker_VOO.txt") as i:
-    VOO_list = i.readlines()
-
-    for i in range(0, len(VOO_list)):
-        VOO_list[i] = list(VOO_list[i].split(", "))
-
-with open("pacemaker_AAI.txt") as i:
-    AAI_list = i.readlines()
-
-    for i in range(0, len(AAI_list)):
-        AAI_list[i] = list(AAI_list[i].split(", "))
-
-with open("pacemaker_VVI.txt") as i:
-    VVI_list = i.readlines()
-
-    for i in range(0, len(VVI_list)):
-        VVI_list[i] = list(VVI_list[i].split(", "))
-
-with open("pacemaker_DOO.txt") as i:
-    DOO_list = i.readlines()
-
-    for i in range(0, len(DOO_list)):
-        DOO_list[i] = list(DOO_list[i].split(", "))
-
-with open("pacemaker_DOOR.txt") as i:
-    DOOR_list = i.readlines()
+    for i in range(0, len(out)):
+        out [i] = list(out[i].split(", "))
     
-    for i in range(0, len(DOOR_list)):
-        DOOR_list[i] = list(DOOR_list[i].split())
+    return out
 
-with open("pacemaker_DDDR.txt") as i:
-    DDDR_list = i.readlines()
-    
-    for i in range(0, len(DDDR_list)):
-        DDDR_list[i] = list(DDDR_list[i].split())
+    '''
+    with open(fileName) as i:
+        data = i.read()
 
-for i in range(0, len(names)):
-    user_list.append(User(names[i], password_list[i], AOO_list[i], VOO_list[i], AAI_list[i], VVI_list[i], DOO_list[i], DOOR_list[i], DDDR_list[i]))
+    out = []
+    outElem  = []
+    elem = []
+    num = ''
+
+    for i in range(0, len(data) - 1):
+        try:
+            if (isinstance(int(data[i]), int)):
+                num += data[i]
+
+                if (data[i+1] == ',' or data[i+1] == ']'):
+                    elem.append(int(num))
+                    num  = ''
+        except ValueError:
+            try:                
+                if (data[i] == "]"):
+                    outElem.append(list(map(int, elem)))
+                    elem.clear()
+            except:
+                pass
+
+    starti = 0
+    for i in range(0, len(outElem)):
+        if (outElem[i] == [] or i == len(outElem)-1):
+            out.append(outElem[starti:i])
+            starti = i+1
+        
+    out.append(outElem.pop())
+
+    return(out)
+    '''
 
 
 # debugging
@@ -232,7 +248,7 @@ def signupCheck(signupWindow, name, password, confirmPassword):
     elif(password.get() != confirmPassword.get()):
         incorrectPassLabel = tk.Label(signupWindow, text = "Password Doesn't Match", font = ("Comic Sans MS", 20)).place(x = 150, y = 550, width = 500, height = 50)
     else:
-        user_list.append(User(name.get(), confirmPassword.get(), default_AOO, default_VOO, default_AAI, default_VVI, default_DOO, default_DOOR, default_DDDR))
+        user_list.append(User(name.get(), confirmPassword.get(), default_AOO, default_VOO, default_LRL, default_AAI, default_VVI, default_hys, default_DOO, default_DOOR, default_DDDR))
         f = open("pacemaker_users.txt", "a")
         f.write(name.get() + "\n")
         f.close
@@ -256,13 +272,14 @@ def signupCheck(signupWindow, name, password, confirmPassword):
                 else:
                     f.write("%s, " % default_VOO[i])
             f.write("\n")
-        
+            
         with open('pacemaker_AAI.txt', 'a') as f:
             for i in range(0, len(default_AAI)):
                 if (i == (len(default_AAI) - 1)):
                     f.write("%s" % default_AAI[i])
                 else:
                     f.write("%s, " % default_AAI[i])
+            
             f.write("\n")
 
         with open('pacemaker_VVI.txt', 'a') as f:
@@ -271,8 +288,9 @@ def signupCheck(signupWindow, name, password, confirmPassword):
                     f.write("%s" % default_VVI[i])
                 else:
                     f.write("%s, " % default_VVI[i])
+            
             f.write("\n")
-        
+            
         with open('pacemaker_DOO.txt', 'a') as f:
             for i in range(0, len(default_DOO)):
                 if (i == (len(default_DOO) - 1)):
@@ -287,15 +305,31 @@ def signupCheck(signupWindow, name, password, confirmPassword):
                     f.write("%s" % default_DOOR[i])
                 else:
                     f.write("%s, " % default_DOOR[i])
-            f.write("\n")
-        
-        with open('pacemaker_DDDR.txt', 'a') as f:
-            for i in range(0, len(default_DDDR)):
-                if (i == (len(default_DDDR) - 1)):
-                    f.write("%s" % default_DDDR[i])
-                else:
-                    f.write("%s, " % default_DDDR[i])
-            f.write("\n")
+                f.write("\n")
+            
+            with open('pacemaker_DDDR.txt', 'a') as f:
+                for i in range(0, len(default_DDDR)):
+                    if (i == (len(default_DDDR) - 1)):
+                        f.write("%s" % default_DDDR[i])
+                    else:
+                        f.write("%s, " % default_DDDR[i])
+                f.write("\n")
+            
+            with open('pacemaker_hys.txt', 'a') as f:
+                for i in range(0, len(default_hys)):
+                    if (i == (len(default_hys) - 1)):
+                        f.write("%s" % default_hys[i])
+                    else:
+                        f.write("%s, " % default_hys[i])
+                f.write("\n")
+
+            with open('pacemaker_LRL.txt', 'a') as f:
+                for i in range(0, len(default_LRL)):
+                    if (i == (len(default_LRL) - 1)):
+                        f.write("%s" % default_LRL[i])
+                    else:
+                        f.write("%s, " % default_LRL[i])
+                f.write("\n")
 
         root.after(250, signupWindow.destroy())
 
@@ -310,7 +344,11 @@ def chooseDisplay(username, password):
             flag = 1
             # ********************************************* window demo ***********************************************************
             
-            menu1(tk.Toplevel(root,  height = 0, width = 0, bg = '#FFB6C1'), i)
+            pacingModeWindow = tk.Toplevel(root,  height = HEIGHT, width = WIDTH, bg = '#FFB6C1')
+            pacingModeWindow.title("Mode Menu")
+            pacingModeWindow.resizable(0, 0)
+            pacingModeWindow.geometry('%dx%d+%d+%d' % (WIDTH, HEIGHT, (root.winfo_screenwidth()/2) - (WIDTH/2), (root.winfo_screenheight()/2) - (HEIGHT/2)))
+            menu1(pacingModeWindow)
 
             global user_id
             user_id = i
@@ -324,22 +362,17 @@ def chooseDisplay(username, password):
             incorrectPassLabel = tk.Label(root, text = "Incorrect Username or Password!", bg = '#FFB6C1', font = ("Comic Sans MS", 20)).place(x = 150, y = 550, width = 500, height = 50)
             flag = 1
 
-def menu1(window, i):
-
-    pacingModeWindow = tk.Toplevel(root,  height = HEIGHT, width = WIDTH, bg = '#FFB6C1')
-    pacingModeWindow.title("Mode Menu")
-    pacingModeWindow.resizable(0, 0)
-    pacingModeWindow.geometry('%dx%d+%d+%d' % (WIDTH, HEIGHT, (root.winfo_screenwidth()/2) - (WIDTH/2), (root.winfo_screenheight()/2) - (HEIGHT/2)))
-
-    window.destroy()
+def menu1(pacingModeWindow):
+    for w in pacingModeWindow.winfo_children():
+        w.destroy()
 
     pacingLabel = tk.Label(pacingModeWindow, text = "Pacing Modes", bg = '#FFB6C1', font = ("Comic Sans MS", 20)).place(x = 150, y = 75, width = 500, height = 50)
     
     
     if(pacemakerConnected == 0):
-        pacemakerLabel = tk.Label(pacingModeWindow, text = "Pacemaker " + str(pacemakerNumber[i]) +  " Connected", bg = '#FF0000', font = ("Comic Sans MS", 10)).place(x = 550, y = 650, width = 200, height = 50)
+        pacemakerLabel = tk.Label(pacingModeWindow, text = "Pacemaker " + str(pacemakerNumber[user_id]) +  " Connected", bg = '#FF0000', font = ("Comic Sans MS", 10)).place(x = 550, y = 650, width = 200, height = 50)
     elif(pacemakerConnected == 1):
-        pacemakerLabel = tk.Label(pacingModeWindow, text = "Pacemaker " + str(pacemakerNumber[i]) +  " Connected", bg = '#00FF00', font = ("Comic Sans MS", 10)).place(x = 550, y = 650, width = 200, height = 50)
+        pacemakerLabel = tk.Label(pacingModeWindow, text = "Pacemaker " + str(pacemakerNumber[user_id]) +  " Connected", bg = '#00FF00', font = ("Comic Sans MS", 10)).place(x = 550, y = 650, width = 200, height = 50)
 
     AOOButton = tk.Button(pacingModeWindow, text="AOO", font=("Comic Sans MS", 15),command = lambda:dataValuesAOO(pacingModeWindow, "AOO", "no"))
     AOOButton.place(x = 250, y = 175, width = 300, height = 50)
@@ -356,22 +389,23 @@ def menu1(window, i):
     DOOButton = tk.Button(pacingModeWindow, text="DOO", font=("Comic Sans MS", 15),command = lambda:dataValuesDOO1(pacingModeWindow, "DOO", "no"))
     DOOButton.place(x = 250, y = 675, width = 300, height = 50)
 
-    nextButton = tk.Button(pacingModeWindow, text = "->", font = ("Comic Sans MS", 15), command = lambda: menu2(pacingModeWindow, i))
+    nextButton = tk.Button(pacingModeWindow, text = "->", font = ("Comic Sans MS", 15), command = lambda: menu2(pacingModeWindow))
     nextButton.place(x = 750, y = 20, width = 30, height = 50)
 
-def menu2(window, i):
-    pacingModeWindow = tk.Toplevel(root,  height = HEIGHT, width = WIDTH, bg = '#FFB6C1')
-    pacingModeWindow.title("Mode Menu")
-    pacingModeWindow.resizable(0, 0)
-    pacingModeWindow.geometry('%dx%d+%d+%d' % (WIDTH, HEIGHT, (root.winfo_screenwidth()/2) - (WIDTH/2), (root.winfo_screenheight()/2) - (HEIGHT/2)))
-
-    window.destroy()
+def menu2(pacingModeWindow):
+    for w in pacingModeWindow.winfo_children():
+        w.destroy()
 
     pacingLabel = tk.Label(pacingModeWindow, text = "Pacing Modes", bg = '#FFB6C1', font = ("Comic Sans MS", 20)).place(x = 150, y = 75, width = 500, height = 50)
+<<<<<<< Updated upstream
     if(pacemakerConnected == 0):
         pacemakerLabel = tk.Label(pacingModeWindow, text = "Pacemaker " + str(pacemakerNumber[i]) +  " Connected", bg = '#FF0000', font = ("Comic Sans MS", 10)).place(x = 550, y = 650, width = 200, height = 50)
     elif(pacemakerConnected == 1):
         pacemakerLabel = tk.Label(pacingModeWindow, text = "Pacemaker " + str(pacemakerNumber[i]) +  " Connected", bg = '#00FF00', font = ("Comic Sans MS", 10)).place(x = 550, y = 650, width = 200, height = 50)
+=======
+    pacemakerLabel = tk.Label(pacingModeWindow, text = "Pacemaker " + str(pacemakerNumber[user_id]) +  " Connected", bg = '#00FF00', font = ("Comic Sans MS", 10)).place(x = 550, y = 650, width = 200, height = 50)
+
+>>>>>>> Stashed changes
     AOOButton = tk.Button(pacingModeWindow, text="AOOR", font=("Comic Sans MS", 15),command = lambda:dataValuesAOOR1(pacingModeWindow, "AOOR", "no"))
     AOOButton.place(x = 250, y = 175, width = 300, height = 50)
 
@@ -387,30 +421,31 @@ def menu2(window, i):
     DOOButton = tk.Button(pacingModeWindow, text="DOOR", font=("Comic Sans MS", 15),command = lambda:dataValuesDOOR(pacingModeWindow, "DOOR", "no"))
     DOOButton.place(x = 250, y = 675, width = 300, height = 50)
 
-    nextButton = tk.Button(pacingModeWindow, text = "->", font = ("Comic Sans MS", 15), command = lambda: menu3(pacingModeWindow, i))
+    nextButton = tk.Button(pacingModeWindow, text = "->", font = ("Comic Sans MS", 15), command = lambda: menu3(pacingModeWindow))
     nextButton.place(x = 750, y = 20, width = 30, height = 50)
 
-    prevButton = tk.Button(pacingModeWindow, text = "<-", font = ("Comic Sans MS", 15), command = lambda: menu1(pacingModeWindow, i))
+    prevButton = tk.Button(pacingModeWindow, text = "<-", font = ("Comic Sans MS", 15), command = lambda: menu1(pacingModeWindow))
     prevButton.place(x = 50, y = 20, width = 30, height = 50)
 
-def menu3(window, i):
-    pacingModeWindow = tk.Toplevel(root,  height = HEIGHT, width = WIDTH, bg = '#FFB6C1')
-    pacingModeWindow.title("Mode Menu")
-    pacingModeWindow.resizable(0, 0)
-    pacingModeWindow.geometry('%dx%d+%d+%d' % (WIDTH, HEIGHT, (root.winfo_screenwidth()/2) - (WIDTH/2), (root.winfo_screenheight()/2) - (HEIGHT/2)))
-
-    window.destroy()
+def menu3(pacingModeWindow):
+    for w in pacingModeWindow.winfo_children():
+        w.destroy()
 
     pacingLabel = tk.Label(pacingModeWindow, text = "Pacing Modes", bg = '#FFB6C1', font = ("Comic Sans MS", 20)).place(x = 150, y = 75, width = 500, height = 50)
+<<<<<<< Updated upstream
     if(pacemakerConnected == 0):
         pacemakerLabel = tk.Label(pacingModeWindow, text = "Pacemaker " + str(pacemakerNumber[i]) +  " Connected", bg = '#FF0000', font = ("Comic Sans MS", 10)).place(x = 550, y = 650, width = 200, height = 50)
     elif(pacemakerConnected == 1):
         pacemakerLabel = tk.Label(pacingModeWindow, text = "Pacemaker " + str(pacemakerNumber[i]) +  " Connected", bg = '#00FF00', font = ("Comic Sans MS", 10)).place(x = 550, y = 650, width = 200, height = 50)
    
+=======
+    pacemakerLabel = tk.Label(pacingModeWindow, text = "Pacemaker " + str(pacemakerNumber[user_id]) +  " Connected", bg = '#00FF00', font = ("Comic Sans MS", 10)).place(x = 550, y = 650, width = 200, height = 50)
+
+>>>>>>> Stashed changes
     AOOButton = tk.Button(pacingModeWindow, text="DDDR", font=("Comic Sans MS", 15),command = lambda:dataValuesDDDR(pacingModeWindow, "DDDR", "no"))
     AOOButton.place(x = 250, y = 175, width = 300, height = 50) 
 
-    prevButton = tk.Button(pacingModeWindow, text = "<-", font = ("Comic Sans MS", 15), command = lambda: menu2(pacingModeWindow, i))
+    prevButton = tk.Button(pacingModeWindow, text = "<-", font = ("Comic Sans MS", 15), command = lambda: menu2(pacingModeWindow))
     prevButton.place(x = 50, y = 20, width = 30, height = 50)
     
 def changeParameter(i, new_value, window, mode, title, label):
@@ -420,7 +455,13 @@ def changeParameter(i, new_value, window, mode, title, label):
         with open("pacemaker_AOO.txt", "r") as file:
             info = file.readlines()
 
-        info[user_id] = ', '.join(user_list[user_id].AOO) + "\n"
+        info[user_id] = ''
+        for i in range(0, len(user_list[user_id].AOO)):
+            info[user_id] += str(user_list[user_id].AOO[i])
+            if (i != len(user_list[user_id].AOO) - 1):
+                info[user_id] += ", "
+
+        info[user_id] += "\n"
 
         with open("pacemaker_AOO.txt", "w") as file:
             file.writelines(info)
@@ -433,20 +474,54 @@ def changeParameter(i, new_value, window, mode, title, label):
         with open("pacemaker_VOO.txt", "r") as file:
             info = file.readlines()
 
-        info[user_id] = ', '.join(user_list[user_id].VOO) + "\n"
+        info[user_id] = ''
+        for i in range(0, len(user_list[user_id].VOO)):
+            info[user_id] += str(user_list[user_id].VOO[i])
+            if (i != len(user_list[user_id].VOO) - 1):
+                info[user_id] += ", "
+
+        info[user_id] += "\n"
 
         with open("pacemaker_VOO.txt", "w") as file:
             file.writelines(info)
 
         dataValuesVOO(window, title, "no")
         
+    elif (mode == "LRL"):
+        user_list[user_id].LRL[i] = new_value.get()
+        
+        with open("pacemaker_LRL.txt", "r") as file:
+            info = file.readlines()
+
+        info[user_id] = ''
+        for i in range(0, len(user_list[user_id].LRL)):
+            info[user_id] += str(user_list[user_id].LRL[i])
+            if (i != len(user_list[user_id].LRL) - 1):
+                info[user_id] += ", "
+
+        info[user_id] += "\n"
+
+        with open("pacemaker_LRL.txt", "w") as file:
+            file.writelines(info)
+
+        if (mode[0] == 'A'):
+            dataValuesAOO(window, title, "no")
+        elif (mode[0] == 'V'):
+            dataValuesVOO(window, title, "no")
+
     elif (mode == "AAI"):
         user_list[user_id].AAI[i] = new_value.get()
         
         with open("pacemaker_AAI.txt", "r") as file:
             info = file.readlines()
 
-        info[user_id] = ', '.join(user_list[user_id].AAI) + "\n"
+        info[user_id] = ''
+        for i in range(0, len(user_list[user_id].AAI)):
+            info[user_id] += str(user_list[user_id].AAI[i])
+            if (i != len(user_list[user_id].AAI) - 1):
+                info[user_id] += ", "
+
+        info[user_id] += "\n"
 
         with open("pacemaker_AAI.txt", "w") as file:
             file.writelines(info)
@@ -459,12 +534,40 @@ def changeParameter(i, new_value, window, mode, title, label):
         with open("pacemaker_VVI.txt", "r") as file:
             info = file.readlines()
 
-        info[user_id] = ', '.join(user_list[user_id].VVI) + "\n"
+        info[user_id] = ''
+        for i in range(0, len(user_list[user_id].VVI)):
+            info[user_id] += str(user_list[user_id].VVI[i])
+            if (i != len(user_list[user_id].VVI) - 1):
+                info[user_id] += ", "
+
+        info[user_id] += "\n"
 
         with open("pacemaker_VVI.txt", "w") as file:
             file.writelines(info)
 
         dataValuesVVI2(window, title, "no")
+    
+    elif (mode == "hys"):
+        user_list[user_id].hys[i] = new_value.get()
+
+        with open("pacemaker_hys.txt", "r") as file:
+            info = file.readlines()
+
+        info[user_id] = ''
+        for i in range(0, len(user_list[user_id].hys)):
+            info[user_id] += str(user_list[user_id].hys[i])
+            if (i != len(user_list[user_id].hys) - 1):
+                info[user_id] += ", "
+
+        info[user_id] += "\n"
+
+        with open("pacemaker_VVI.txt", "w") as file:
+            file.writelines(info)
+
+        if (mode[0] == 'A'):
+            dataValuesAAI2(window, title, "no")
+        elif (mode[0] == 'V'):
+            dataValuesVVI2(window, mode, "no")
         
     elif (mode == "DOO"):
         user_list[user_id].DOO[i] = new_value.get()
@@ -472,7 +575,13 @@ def changeParameter(i, new_value, window, mode, title, label):
         with open("pacemaker_DOO.txt", "r") as file:
             info = file.readlines()
 
-        info[user_id] = ', '.join(user_list[user_id].DOO) + "\n"
+        info[user_id] = ''
+        for i in range(0, len(user_list[user_id].DOO)):
+            info[user_id] += str(user_list[user_id].DOO[i])
+            if (i != len(user_list[user_id].DOO) - 1):
+                info[user_id] += ", "
+
+        info[user_id] += "\n"
 
         with open("pacemaker_DOO.txt", "w") as file:
             file.writelines(info)
@@ -488,7 +597,13 @@ def changeParameter(i, new_value, window, mode, title, label):
         with open("pacemaker_DOOR.txt", "r") as file:
             info = file.readlines()
 
-        info[user_id] = ''.join(user_list[user_id].DOOR) + "\n"
+        info[user_id] = ''
+        for i in range(0, len(user_list[user_id].DOOR)):
+            info[user_id] += str(user_list[user_id].DOOR[i])
+            if (i != len(user_list[user_id].DOOR) - 1):
+                info[user_id] += ", "
+
+        info[user_id] += "\n"
 
         with open("pacemaker_DOOR.txt", "w") as file:
             file.writelines(info)
@@ -501,7 +616,13 @@ def changeParameter(i, new_value, window, mode, title, label):
         with open("pacemaker_DDDR.txt", "r") as file:
             info = file.readlines()
 
-        info[user_id] = ''.join(user_list[user_id].DDDR) + "\n"
+        info[user_id] = ''
+        for i in range(0, len(user_list[user_id].DDDR)):
+            info[user_id] += str(user_list[user_id].DDDR[i])
+            if (i != len(user_list[user_id].DDDR) - 1):
+                info[user_id] += ", "
+
+        info[user_id] += "\n"
 
         with open("pacemaker_DDDR.txt", "w") as file:
             file.writelines(info)
@@ -512,14 +633,13 @@ def changeParameter(i, new_value, window, mode, title, label):
 
 def checkParameter(min, max, i, new_value, window, x_in, y_in, mode, title, label, paramNumber):
     try:
-        if (mode == "DOO" and i == 1):
+        if (mode == "DOO" and i == 1) or (mode == "VVI" and i == 0) or (mode == "AAI" and i == 1):
             if (float(new_value.get()) > max or float(new_value.get()) < min):
                 invalidEntry = tk.Label(window, text = "Out of Range",bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x = x_in + 320, y = y_in)
             else:
                 changeParameter(i, new_value, window, mode, title, label)
                 serial.updateParam(paramNumber,new_value)
                 print(mode)
-
         else:
             if (int(new_value.get()) > max or int(new_value.get()) < min):
                 invalidEntry = tk.Label(window, text = "Out of Range",bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x = x_in + 320, y = y_in)
@@ -636,6 +756,28 @@ def dualGraph():
     plt.show()
 
 # MODES
+def LRL(window, title):
+    # Lower Rate
+    lowerRateLabel = tk.Label(window, text = "Lower Rate Limit: " + str(user_list[user_id].LRL[0]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=50)
+    LRRangeLabel =  tk.Label(window, text = "(Range: 343 - 2000 ms)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=85)
+
+    lowerRateEntry = tk.Entry(window, font=("Comic Sans MS", 20))
+    lowerRateEntry.place(x = 50, y = 140, width = 500, height = 50)
+
+    lowerRateChangeButton = tk.Button(window, text="Change", font=("Comic Sans MS", 15), command = lambda:checkParameter(343, 2000, 0, lowerRateEntry, window, 50, 215, "LRL", title, lowerRateLabel))
+    lowerRateChangeButton.place(x = 50, y = 215, width = 300, height = 50)
+
+def hys(window, title):
+    #hysteris
+    hysLabel = tk.Label(window, text = "Hystersis: " + str(user_list[user_id].hys[0]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=50)
+    hysRangeLabel =  tk.Label(window, text = "(Range: 343 - 2000 ms)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=85)
+
+    hysRateEntry = tk.Entry(window, font=("Comic Sans MS", 20))
+    hysRateEntry.place(x = 50, y = 140, width = 500, height = 50)
+
+    hysRateChangeButton = tk.Button(window, text="Change", font=("Comic Sans MS", 15), command = lambda:checkParameter(343, 2000, 0, hysRateEntry, window, 50, 215, "hys", title, hysLabel))
+    hysRateChangeButton.place(x = 50, y = 215, width = 300, height = 50)
+
 def dataValuesAOO(oldWin, title, delCom):
     AOOWindow = tk.Toplevel(root,  height = root.winfo_screenheight(), width = root.winfo_screenwidth(), bg = '#FFB6C1')
     AOOWindow.title(title)
@@ -645,6 +787,7 @@ def dataValuesAOO(oldWin, title, delCom):
     if (delCom == "yes"):
         oldWin.destroy()
 
+<<<<<<< Updated upstream
     print(user_id)
     print(user_list[user_id].AOO)
 
@@ -661,25 +804,36 @@ def dataValuesAOO(oldWin, title, delCom):
 
     lowerRateChangeButton = tk.Button(AOOWindow, text="Change", font=("Comic Sans MS", 15), command = lambda:checkParameter(343, 2000, 0, lowerRateEntry_1, AOOWindow, 50, 215, "AOO", title, lowerRateLabel, 1))
     lowerRateChangeButton.place(x = 50, y = 215, width = 300, height = 50)
+=======
+    LRL(AOOWindow, title) # Lower Rate Limit
+>>>>>>> Stashed changes
 
     # Atrial Amplitude
-    amplitudeLabel = tk.Label(AOOWindow, text = "Atrial Amplitude: " + str(user_list[user_id].AOO[1]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=325)
+    amplitudeLabel = tk.Label(AOOWindow, text = "Atrial Amplitude: " + str(user_list[user_id].AOO[0]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=325)
     amplitudeRangeLabel =  tk.Label(AOOWindow, text = "(Range: 500-5000mV)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=360)
 
     amplitudeEntry = tk.Entry(AOOWindow, font=("Comic Sans MS", 20))
     amplitudeEntry.place(x = 50, y = 400, width = 500, height = 50)
 
+<<<<<<< Updated upstream
     amplitudeChangeButton = tk.Button(AOOWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(500, 5000, 1, amplitudeEntry, AOOWindow, 50, 475, "AOO", title, amplitudeLabel, 2))
+=======
+    amplitudeChangeButton = tk.Button(AOOWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(500, 5000, 0, amplitudeEntry, AOOWindow, 50, 475, "AOO", title, amplitudeLabel))
+>>>>>>> Stashed changes
     amplitudeChangeButton.place(x = 50, y = 475, width = 300, height = 50)
 
     # Atrial Pulse Width
-    pWLabel = tk.Label(AOOWindow, text = "Atrial Pulse Width: " + str(user_list[user_id].AOO[2]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=600)
+    pWLabel = tk.Label(AOOWindow, text = "Atrial Pulse Width: " + str(user_list[user_id].AOO[1]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=600)
     pWLabel =  tk.Label(AOOWindow, text = "(Range: 1-30ms)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=635)
 
     pWEntry = tk.Entry(AOOWindow, font=("Comic Sans MS", 20))
     pWEntry.place(x = 50, y = 675, width = 500, height = 50)
 
+<<<<<<< Updated upstream
     pwEntryChangeButton = tk.Button(AOOWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(1, 30, 2, pWEntry, AOOWindow, 50, 750, "AOO", title, pWLabel, 3))
+=======
+    pwEntryChangeButton = tk.Button(AOOWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(1, 30, 1, pWEntry, AOOWindow, 50, 750, "AOO", title, pWLabel))
+>>>>>>> Stashed changes
     pwEntryChangeButton.place(x = 50, y = 750, width = 300, height = 50)
     
     # Switch Button for AAI Window
@@ -702,11 +856,15 @@ def dataValuesVOO(oldWin, title, delCom):
     if (delCom == "yes"):
         oldWin.destroy()
 
+<<<<<<< Updated upstream
     serial.updateParam(17,3)
     serial.updateParam(18,1)
     serial.updateParam(19,2)
     serial.updateParam(15,0)    
 
+=======
+    '''
+>>>>>>> Stashed changes
     lowerRateLabel = tk.Label(VOOWindow, text = "Ventrical Lower Rate: " + str(user_list[user_id].VOO[0]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=50)
     LRRangeLabel =  tk.Label(VOOWindow, text = "(Range: 343 - 2000 ms)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=85)
 
@@ -715,25 +873,46 @@ def dataValuesVOO(oldWin, title, delCom):
 
     lowerRateChangeButton = tk.Button(VOOWindow, text="Change", font=("Comic Sans MS", 15), command = lambda:checkParameter(343, 2000, 0, lowerRateEntry_1, VOOWindow, 50, 215, "VOO", title, lowerRateLabel,1))
     lowerRateChangeButton.place(x = 50, y = 215, width = 300, height = 50)
+    '''
 
+    # Lower Rate Limit
+    LRL(VOOWindow, title)
+
+<<<<<<< Updated upstream
     # Ventricle Amplitude
     amplitudeLabel = tk.Label(VOOWindow, text = "Ventrical Amplitude: " + str(user_list[user_id].VOO[1]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=325)
+=======
+    # Atrial Amplitude
+    amplitudeLabel = tk.Label(VOOWindow, text = "Ventricle Amplitude: " + str(user_list[user_id].VOO[0]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=325)
+>>>>>>> Stashed changes
     amplitudeRangeLabel =  tk.Label(VOOWindow, text = "(Range: 500-5000mV)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=360)
 
     amplitudeEntry = tk.Entry(VOOWindow, font=("Comic Sans MS", 20))
     amplitudeEntry.place(x = 50, y = 400, width = 500, height = 50)
 
+<<<<<<< Updated upstream
     amplitudeChangeButton = tk.Button(VOOWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(500, 5000, 1, amplitudeEntry, VOOWindow, 50, 475, "VOO", title, amplitudeLabel,4))
     amplitudeChangeButton.place(x = 50, y = 475, width = 300, height = 50)
 
     # Ventricle Pulse Width
     pWLabel = tk.Label(VOOWindow, text = "Ventrical Pulse Width: " + str(user_list[user_id].VOO[2]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=600)
+=======
+    amplitudeChangeButton = tk.Button(VOOWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(500, 5000, 0, amplitudeEntry, VOOWindow, 50, 475, "VOO", title, amplitudeLabel))
+    amplitudeChangeButton.place(x = 50, y = 475, width = 300, height = 50)
+
+    # Atrial Pulse Width
+    pWLabel = tk.Label(VOOWindow, text = "Ventricle Pulse Width: " + str(user_list[user_id].VOO[1]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=600)
+>>>>>>> Stashed changes
     pWLabel =  tk.Label(VOOWindow, text = "(Range: 1-30ms)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=635)
 
     pWEntry = tk.Entry(VOOWindow, font=("Comic Sans MS", 20))
     pWEntry.place(x = 50, y = 675, width = 500, height = 50)
 
+<<<<<<< Updated upstream
     pwEntryChangeButton = tk.Button(VOOWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(1, 30, 2, pWEntry, VOOWindow, 50, 750, "VOO", title, pWLabel,5))
+=======
+    pwEntryChangeButton = tk.Button(VOOWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(1, 30, 1, pWEntry, VOOWindow, 50, 750, "VOO", title, pWLabel))
+>>>>>>> Stashed changes
     pwEntryChangeButton.place(x = 50, y = 750, width = 300, height = 50)
 
     # Switch Button for AAI Window
@@ -778,30 +957,45 @@ def dataValuesAAI2(oldWin, title, delCom):
 
     graph(AAIWindow)
 
+<<<<<<< Updated upstream
     serial.updateParam(17,1)
     serial.updateParam(18,2)
     serial.updateParam(19,1)
     serial.updateParam(15,0)
+=======
+    hys(AAIWindow, title)
+>>>>>>> Stashed changes
 
     # ARP
-    ARPLabel = tk.Label(AAIWindow, text = "ARP: " + str(user_list[user_id].AAI[0]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=200)
-    ARPLabel =  tk.Label(AAIWindow, text = "(Range: 150-500 ms)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=235)
+    ARPLabel = tk.Label(AAIWindow, text = "ARP: " + str(user_list[user_id].AAI[0]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=325)
+    ARPLabel =  tk.Label(AAIWindow, text = "(Range: 150-500 ms)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=360)
 
     ARPEntry = tk.Entry(AAIWindow, font=("Comic Sans MS", 20))
-    ARPEntry.place(x = 50, y = 275, width = 500, height = 50)
+    ARPEntry.place(x = 50, y = 400, width = 500, height = 50)
 
+    ARPEntryChangeButton_2 = tk.Button(AAIWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(150, 500, 0, ARPEntry, AAIWindow, 50, 475, "AAI", title, ARPLabel))
+    ARPEntryChangeButton_2.place(x = 50, y = 475, width = 300, height = 50)
+
+<<<<<<< Updated upstream
     ARPEntryChangeButton_2 = tk.Button(AAIWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(150, 500, 0, ARPEntry, AAIWindow, 50, 350, "AAI", title, ARPLabel, 7))
     ARPEntryChangeButton_2.place(x = 50, y = 350, width = 300, height = 50)
     
+=======
+>>>>>>> Stashed changes
     # ASensitivity
-    A_sensLabel = tk.Label(AAIWindow, text = "Atrical Sensitivity: " + str(user_list[user_id].AAI[1]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=475)
-    A_sensLabel =  tk.Label(AAIWindow, text = "(Range: 3000-5000 mV)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=510)
+    A_sensLabel = tk.Label(AAIWindow, text = "Atrial Sensitivity: " + str(user_list[user_id].AAI[1]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=600)
+    A_sensLabel =  tk.Label(AAIWindow, text = "(Range: 3 - 5 V)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=635)
 
     A_sensEntry = tk.Entry(AAIWindow, font=("Comic Sans MS", 20))
-    A_sensEntry.place(x = 50, y = 550, width = 500, height = 50)
+    A_sensEntry.place(x = 50, y = 675, width = 500, height = 50)
 
+<<<<<<< Updated upstream
     A_sensEntryChangeButton_2 = tk.Button(AAIWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(3000, 5000, 1, A_sensEntry, AAIWindow, 50, 635, "AAI", title, A_sensLabel,8))
     A_sensEntryChangeButton_2.place(x = 50, y = 635, width = 300, height = 50)
+=======
+    A_sensEntryChangeButton_2 = tk.Button(AAIWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(3, 5, 1, A_sensEntry, AAIWindow, 50, 750, "AAI", title, A_sensLabel))
+    A_sensEntryChangeButton_2.place(x = 50, y = 750, width = 300, height = 50)
+>>>>>>> Stashed changes
 
     # goes to previous window
     if (title == 'AAIR'):
@@ -841,13 +1035,18 @@ def dataValuesVVI2(oldWin, title, delCom):
     VVIWindow = tk.Toplevel(root,  height = root.winfo_screenheight(), width = root.winfo_screenwidth(), bg = '#FFB6C1')
     VVIWindow.title(title)
 
+    hys(VVIWindow, title)
     graph(VVIWindow)
+<<<<<<< Updated upstream
 
     serial.updateParam(17,2)
     serial.updateParam(18,2)
     serial.updateParam(19,2)
     serial.updateParam(15,0)
 
+=======
+    '''
+>>>>>>> Stashed changes
     # VRP
     VRPLabel = tk.Label(VVIWindow, text = "VRP: " + str(user_list[user_id].VVI[0]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=200)
     VRPLabel =  tk.Label(VVIWindow, text = "(Range: 150-500 ms)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=235)
@@ -857,16 +1056,22 @@ def dataValuesVVI2(oldWin, title, delCom):
 
     VRPEntryChangeButton_2 = tk.Button(VVIWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(150, 500, 0, VRPEntry, VVIWindow, 50, 350, "VVI", title, VRPLabel,7))
     VRPEntryChangeButton_2.place(x = 50, y = 350, width = 300, height = 50)
-    
-    # ASensitivity
-    V_sensLabel = tk.Label(VVIWindow, text = "Ventrical Sensitivity: " + str(user_list[user_id].VVI[1]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=475)
-    V_sensLabel =  tk.Label(VVIWindow, text = "(Range: 3000-5000 mV)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=510)
+    '''
+
+    # VSensitivity
+    V_sensLabel = tk.Label(VVIWindow, text = "Ventricle Sensitivity: " + str(user_list[user_id].VVI[0]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=300)
+    V_sensLabel =  tk.Label(VVIWindow, text = "(Range: 3-5 V)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=335)
 
     V_sensEntry = tk.Entry(VVIWindow, font=("Comic Sans MS", 20))
-    V_sensEntry.place(x = 50, y = 550, width = 500, height = 50)
+    V_sensEntry.place(x = 50, y = 375, width = 500, height = 50)
 
+<<<<<<< Updated upstream
     V_sensEntryChangeButton_2 = tk.Button(VVIWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(3000, 5000, 1, V_sensEntry, VVIWindow, 50, 635, "VVI", title, V_sensLabel,9))
     V_sensEntryChangeButton_2.place(x = 50, y = 635, width = 300, height = 50)
+=======
+    V_sensEntryChangeButton_2 = tk.Button(VVIWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(3, 5, 0, V_sensEntry, VVIWindow, 50, 460, "VVI", title, V_sensLabel))
+    V_sensEntryChangeButton_2.place(x = 50, y = 460, width = 300, height = 50)
+>>>>>>> Stashed changes
 
     if (title == "VVIR" or title == "DDDR"):
         nextButton = tk.Button(VVIWindow, text = "Next Page", font = ("Comic Sans MS", 15), command = lambda: dataValuesDOO1(VVIWindow, title, "yes"))
@@ -905,7 +1110,7 @@ def dataValuesDOO1(oldWin, title, delCom):
 
     # Activity Threshold
     actLabel = tk.Label(DOOWindow, text = "Activity Threshold: " + str(user_list[user_id].DOO[1]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=325)
-    actRangeLabel =  tk.Label(DOOWindow, text = "(Range: 0.05 - 1.5 activity)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=360)
+    actRangeLabel =  tk.Label(DOOWindow, text = "(Range: 0.05 - 1.5 g)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=360)
 
     actEntry = tk.Entry(DOOWindow, font=("Comic Sans MS", 20))
     actEntry.place(x = 50, y = 400, width = 500, height = 50)
@@ -993,15 +1198,19 @@ def dataValuesDOO2(oldWin, title, delCom):
 
         prevButton = tk.Button(DOOWindow, text = "Previous Page", font = ("Comic Sans MS", 15), command = lambda: dataValuesDOO1(DOOWindow, title, "yes"))
         prevButton.place(x = 775, y = 800, width = 300, height = 50)
+    
+    else:
+        switchButton2 = tk.Button(DOOWindow, text = "Previous Page", font = ("Comic Sans MS", 15), command = lambda: dataValuesDOO1(DOOWindow, title, "yes"))
+        switchButton2.place(x = 1100, y = 800, width = 300, height = 50)
+
+    '''
     elif (title == "DDDR"):
         nextButton = tk.Button(DOOWindow, text = "Next Page", font = ("Comic Sans MS", 15), command = lambda: dataValuesDDDR2(DOOWindow, title, "yes"))
         nextButton.place(x = 1100, y = 800, width = 300, height = 50)
 
         prevButton = tk.Button(DOOWindow, text = "Previous Page", font = ("Comic Sans MS", 15), command = lambda: dataValuesDOO1(DOOWindow, title, "yes"))
         prevButton.place(x = 775, y = 800, width = 300, height = 50)
-    else:
-        switchButton2 = tk.Button(DOOWindow, text = "Previous Page", font = ("Comic Sans MS", 15), command = lambda: dataValuesDOO1(DOOWindow, title, "yes"))
-        switchButton2.place(x = 1100, y = 800, width = 300, height = 50)
+    '''
 
 def dataValuesAOOR1(oldWin, title, delCom):
     if (delCom == "yes"):
@@ -1066,12 +1275,16 @@ def dataValuesDOOR2(oldWin, title, delCom):
 
     graph(DOORWindow)
 
+<<<<<<< Updated upstream
     serial.updateParam(17,3)
     serial.updateParam(18,1)
     serial.updateParam(19,1)
     serial.updateParam(15,1)
 
     responseLabel = tk.Label(DOORWindow, text = "Fixed Atrial Ventrical (AV) Delay: " + str(user_list[user_id].DOOR[0]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=200)
+=======
+    responseLabel = tk.Label(DOORWindow, text = "Fixed Atrial Ventricle (AV) Delay: " + str(user_list[user_id].DOOR[0]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=200)
+>>>>>>> Stashed changes
     responseLabel =  tk.Label(DOORWindow, text ="(Range: 70-300 ms)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=235)
 
     responseEntry = tk.Entry(DOORWindow, font=("Comic Sans MS", 20))
@@ -1103,12 +1316,17 @@ def dataValuesDDDR2(oldWin, title, delCom):
 
     graph(DDDRWindow)
 
+<<<<<<< Updated upstream
     serial.updateParam(17,3)
     serial.updateParam(18,3)
     serial.updateParam(19,3)
     serial.updateParam(15,1)
 
     responseLabel = tk.Label(DDDRWindow, text = "RVARP: " + str(user_list[user_id].DDDR[0]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=200)
+=======
+    '''
+    responseLabel = tk.Label(DDDRWindow, text = "PVARP: " + str(user_list[user_id].DDDR[0]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=200)
+>>>>>>> Stashed changes
     responseLabel =  tk.Label(DDDRWindow, text ="(Range: 150 - 500 ms)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=235)
 
     responseEntry = tk.Entry(DDDRWindow, font=("Comic Sans MS", 20))
@@ -1119,6 +1337,7 @@ def dataValuesDDDR2(oldWin, title, delCom):
 
     switchButton2 = tk.Button(DDDRWindow, text = "Previous Page", font = ("Comic Sans MS", 15), command = lambda: dataValuesDOO2(DDDRWindow, title, "yes"))
     switchButton2.place(x = 1100, y = 800, width = 300, height = 50)
+    '''
 
 # main window
 def main():
@@ -1135,6 +1354,25 @@ def main():
     fooLabel = Label(root, "foo")
     fooLabel.place(100, 50, 200)
     fooLabel.hide()
+    # *************************************************************************
+    #connect()
+    # ************************* read files ************************************
+    AOO_list = read_file("pacemaker_AOO.txt")
+    VOO_list = read_file("pacemaker_VOO.txt")
+    LRL_list = read_file("pacemaker_LRL.txt")
+    AAI_list = read_file("pacemaker_AAI.txt")
+    VVI_list = read_file("pacemaker_VVI.txt")
+    hys_list = read_file("pacemaker_hys.txt")
+    DOO_list = read_file("pacemaker_DOO.txt")
+    DOOR_list = read_file("pacemaker_DOOR.txt")
+    DDDR_list = read_file("pacemaker_DDDR.txt")
+    hys_list = read_file("pacemaker_hys.txt")
+
+    global user_list
+    user_list = []
+    for i in range(0, len(names)):
+        user_list.append(User(names[i], password_list[i], AOO_list[i], VOO_list[i], LRL_list[i], AAI_list[i], VVI_list[i], hys_list[i], DOO_list[i], DOOR_list[i], DDDR_list[i]))
+
     # *************************************************************************
 
     welcomeLabel = tk.Label(root, text = "Welcome!", bg = '#FFB6C1', font = ("Comic Sans MS", 30))
@@ -1158,7 +1396,6 @@ def main():
     passwordEntry = PasswordEntry(root)
     passwordEntry.place(150, 500, 500, 50)
     # *************************************************************************
-    root.bind('<Return>', print("hi"))
     
     loginButton = tk.Button(root, text="Login", font=("Comic Sans MS", 15), command = lambda: chooseDisplay(nameEntry.get(), passwordEntry.get()))
     loginButton.place(x = 350, y = 600, width = 100, height = 50)
@@ -1167,6 +1404,11 @@ def main():
     signupButton.place(x = 350, y = 675, width = 100, height = 50)
 
     root.mainloop()
+
+def connect():
+    return connectOrNot
+    
+
 
 main() # runs program
       # %%
