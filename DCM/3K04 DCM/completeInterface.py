@@ -66,6 +66,9 @@ default_DDDR = [300]
 
 global pacemakerConnected
 pacemakerConnected = True
+
+global run
+run = True
 serial = Serial("COM4")
 
 # stores textfile info in User class object
@@ -649,6 +652,10 @@ def randValues(arr):
     # if(i == 6):
     #     i = 0
 
+def runFalse():
+    global run
+    run = False
+
 def pulse(atrium, ventricle, window):
     maxSize = 200
     sampleRate = 0.0000001
@@ -656,7 +663,9 @@ def pulse(atrium, ventricle, window):
     dataV = [ [0]*2 for size in range(0) ]
 
     display = True
-    while(True):
+
+    run = True
+    while(run):
         newData = serial.requestEgram()
 
         plt.cla()
@@ -720,8 +729,8 @@ def pulse(atrium, ventricle, window):
         plt.gcf().axes[0].xaxis.get_major_formatter().set_scientific(False)
         plt.pause(sampleRate)
 
-        quitButton = tk.Button(window, text="Quit", font=("Comic Sans MS", 15), command = plt.close())
-        dualGraphButton.place(x = 830, y = 525, width = 300, height = 50) 
+        quitButton = tk.Button(window, text="Quit", font=("Comic Sans MS", 15), command = runFalse())
+        quitButton.place(x = 830, y = 525, width = 300, height = 50) 
     plt.show()
 
 
