@@ -590,15 +590,15 @@ def checkParameter(min, max, i, new_value, window, x_in, y_in, mode, title, labe
             if (float(new_value.get()) > max or float(new_value.get()) < min):
                 invalidEntry = tk.Label(window, text = "Out of Range",bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x = x_in + 320, y = y_in)
             else:
+                serial.updateParam(paramNumber,float(new_value.get()) )
                 changeParameter(i, new_value, window, mode, title, label)
-                serial.updateParam(paramNumber,new_value)
                 print(mode)
         else:
             if (int(new_value.get()) > max or int(new_value.get()) < min):
                 invalidEntry = tk.Label(window, text = "Out of Range",bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x = x_in + 320, y = y_in)
             else:
+                serial.updateParam(paramNumber,float(new_value.get()) )
                 changeParameter(i, new_value, window, mode, title, label)
-                serial.updateParam(paramNumber,new_value)
 
     except ValueError:
         invalidEntry = tk.Label(window, text = "Invalid Entry",bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x = x_in + 320, y = y_in)
