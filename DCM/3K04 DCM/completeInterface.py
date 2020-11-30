@@ -88,43 +88,6 @@ def read_file(fileName):
 
     return out
 
-    '''
-    with open(fileName) as i:
-        data = i.read()
-
-    out = []
-    outElem  = []
-    elem = []
-    num = ''
-
-    for i in range(0, len(data) - 1):
-        try:
-            if (isinstance(int(data[i]), int)):
-                num += data[i]
-
-                if (data[i+1] == ',' or data[i+1] == ']'):
-                    elem.append(int(num))
-                    num  = ''
-        except ValueError:
-            try:
-                if (data[i] == "]"):
-                    outElem.append(list(map(int, elem)))
-                    elem.clear()
-            except:
-                pass
-
-    starti = 0
-    for i in range(0, len(outElem)):
-        if (outElem[i] == [] or i == len(outElem)-1):
-            out.append(outElem[starti:i])
-            starti = i+1
-
-    out.append(outElem.pop())
-
-    return(out)
-    '''
-
-
 
     if (response[0] == 0):
         connectOrNot = False
@@ -642,14 +605,15 @@ def checkParameter(min, max, i, new_value, window, x_in, y_in, mode, title, labe
 
 def graph(window):
     #This part goes in the chooseDisplay function where the other buttons are
-    atrGraphButton = tk.Button(window, text="Atrium Graph", font=("Comic Sans MS", 15),command = lambda:atrGraph())
+    atrGraphButton = tk.Button(window, text="Atrium Graph", font=("Comic Sans MS", 15),command = lambda:atrGraph(window))
     atrGraphButton.place(x = 830, y = 325, width = 300, height = 50)
 
-    venGraphButton = tk.Button(window, text="Ventricle Graph", font=("Comic Sans MS", 15),command = lambda:venGraph())
+    venGraphButton = tk.Button(window, text="Ventricle Graph", font=("Comic Sans MS", 15),command = lambda:venGraph(window))
     venGraphButton.place(x = 830, y = 425, width = 300, height = 50)
 
-    dualGraphButton = tk.Button(window, text="Display Both Graphs", font=("Comic Sans MS", 15),command = lambda:dualGraph())
+    dualGraphButton = tk.Button(window, text="Display Both Graphs", font=("Comic Sans MS", 15),command = lambda:dualGraph(window))
     dualGraphButton.place(x = 830, y = 525, width = 300, height = 50)
+
 
 def randValues(arr):
     i = 0
@@ -685,14 +649,14 @@ def randValues(arr):
     # if(i == 6):
     #     i = 0
 
-def pulse(atrium, ventricle):
-    maxSize = 200;
-    sampleRate = 0.0000001;
+def pulse(atrium, ventricle, window):
+    maxSize = 200
+    sampleRate = 0.0000001
     dataA = [ [0]*2 for size in range(0) ]
     dataV = [ [0]*2 for size in range(0) ]
 
-    display = True;
-    for i in range(200):
+    display = True
+    while(True):
         newData = serial.requestEgram()
 
         plt.cla()
@@ -718,7 +682,7 @@ def pulse(atrium, ventricle):
             if len(dataA) < maxSize:
                 dataA.append([time, signal])
             else:
-                dataA.pop(0);
+                dataA.pop(0)
                 dataA.append([time, signal])
             #print("data: ", data)
 
@@ -741,7 +705,7 @@ def pulse(atrium, ventricle):
             if len(dataV) < maxSize:
                 dataV.append([time, signal])
             else:
-                dataV.pop(0);
+                dataV.pop(0)
                 dataV.append([time, signal])
             #print("data: ", data)
 
@@ -756,20 +720,22 @@ def pulse(atrium, ventricle):
         plt.gcf().axes[0].xaxis.get_major_formatter().set_scientific(False)
         plt.pause(sampleRate)
 
+        quitButton = tk.Button(window, text="Quit", font=("Comic Sans MS", 15), command = plt.close())
+        dualGraphButton.place(x = 830, y = 525, width = 300, height = 50) 
     plt.show()
 
 
 
-def atrGraph():
-    atrAni = FuncAnimation(plt.gcf(),pulse(1,0), interval = 100)
+def atrGraph(window):
+    atrAni = FuncAnimation(plt.gcf(),pulse(1,0, window), interval = 100)
 
 
-def venGraph():
-    venAni = FuncAnimation(plt.gcf(),pulse(0,1), interval = 100)
+def venGraph(window):
+    venAni = FuncAnimation(plt.gcf(),pulse(0,1, window), interval = 100)
 
 
-def dualGraph():
-    dualAni = FuncAnimation(plt.gcf(),pulse(1,1), interval = 100)
+def dualGraph(window):
+    dualAni = FuncAnimation(plt.gcf(),pulse(1,1, window), interval = 100)
 
 
 # MODES
