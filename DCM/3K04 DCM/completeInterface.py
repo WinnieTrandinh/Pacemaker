@@ -6,7 +6,6 @@
 # libraries
 import tkinter as tk
 import random
-<<<<<<< Updated upstream
 import matplotlib.pyplot as plt
 import numpy as np
 from Serial import *
@@ -14,11 +13,6 @@ from itertools import count
 from matplotlib.animation import FuncAnimation
 import time
 
-=======
-#import matplotlib.pyplot as plt
-#import numpy as np
-#from Serial import *
->>>>>>> Stashed changes
 
 
 # stores information from text files
@@ -70,14 +64,10 @@ default_DOO = [500, 0.1 , 20, 8, 500]
 default_DOOR = [300]
 default_DDDR = [300]
 
-<<<<<<< Updated upstream
-pacemakerConnected = random.randint(0,1)
+global pacemakerConnected
+pacemakerConnected = True
 serial = Serial("COM4")
 
-
-=======
-connectOrNot = True
->>>>>>> Stashed changes
 # stores textfile info in User class object
 with open("pacemaker_users.txt") as i:
     names = i.readlines()
@@ -134,6 +124,10 @@ def read_file(fileName):
     return(out)
     '''
 
+
+
+    if (response[0] == 0):
+        connectOrNot = False
 
 # debugging
 for i in user_list:
@@ -208,6 +202,11 @@ HEIGHT = 800
 WIDTH = 800
 canvas = tk.Canvas(root, height = HEIGHT, width = WIDTH, bg = '#FFB6C1')
 canvas.pack()
+
+def connection(selec, val):
+    response = serial.updateParam(selec, val)
+    if (response[0] == 0):
+        pacemakerConnected = False
 
 def signup():
     if(len(user_list) < 10):
@@ -397,15 +396,11 @@ def menu2(pacingModeWindow):
         w.destroy()
 
     pacingLabel = tk.Label(pacingModeWindow, text = "Pacing Modes", bg = '#FFB6C1', font = ("Comic Sans MS", 20)).place(x = 150, y = 75, width = 500, height = 50)
-<<<<<<< Updated upstream
     if(pacemakerConnected == 0):
         pacemakerLabel = tk.Label(pacingModeWindow, text = "Pacemaker " + str(pacemakerNumber[i]) +  " Connected", bg = '#FF0000', font = ("Comic Sans MS", 10)).place(x = 550, y = 650, width = 200, height = 50)
     elif(pacemakerConnected == 1):
         pacemakerLabel = tk.Label(pacingModeWindow, text = "Pacemaker " + str(pacemakerNumber[i]) +  " Connected", bg = '#00FF00', font = ("Comic Sans MS", 10)).place(x = 550, y = 650, width = 200, height = 50)
-=======
-    pacemakerLabel = tk.Label(pacingModeWindow, text = "Pacemaker " + str(pacemakerNumber[user_id]) +  " Connected", bg = '#00FF00', font = ("Comic Sans MS", 10)).place(x = 550, y = 650, width = 200, height = 50)
-
->>>>>>> Stashed changes
+        
     AOOButton = tk.Button(pacingModeWindow, text="AOOR", font=("Comic Sans MS", 15),command = lambda:dataValuesAOOR1(pacingModeWindow, "AOOR", "no"))
     AOOButton.place(x = 250, y = 175, width = 300, height = 50)
 
@@ -432,16 +427,11 @@ def menu3(pacingModeWindow):
         w.destroy()
 
     pacingLabel = tk.Label(pacingModeWindow, text = "Pacing Modes", bg = '#FFB6C1', font = ("Comic Sans MS", 20)).place(x = 150, y = 75, width = 500, height = 50)
-<<<<<<< Updated upstream
     if(pacemakerConnected == 0):
         pacemakerLabel = tk.Label(pacingModeWindow, text = "Pacemaker " + str(pacemakerNumber[i]) +  " Connected", bg = '#FF0000', font = ("Comic Sans MS", 10)).place(x = 550, y = 650, width = 200, height = 50)
     elif(pacemakerConnected == 1):
         pacemakerLabel = tk.Label(pacingModeWindow, text = "Pacemaker " + str(pacemakerNumber[i]) +  " Connected", bg = '#00FF00', font = ("Comic Sans MS", 10)).place(x = 550, y = 650, width = 200, height = 50)
    
-=======
-    pacemakerLabel = tk.Label(pacingModeWindow, text = "Pacemaker " + str(pacemakerNumber[user_id]) +  " Connected", bg = '#00FF00', font = ("Comic Sans MS", 10)).place(x = 550, y = 650, width = 200, height = 50)
-
->>>>>>> Stashed changes
     AOOButton = tk.Button(pacingModeWindow, text="DDDR", font=("Comic Sans MS", 15),command = lambda:dataValuesDDDR(pacingModeWindow, "DDDR", "no"))
     AOOButton.place(x = 250, y = 175, width = 300, height = 50) 
 
@@ -695,10 +685,6 @@ def randValues(arr):
     # if(i == 6):
     #     i = 0
 
-
-
-
-
 def pulse():
     data = [0]*100
     pointer = 0
@@ -730,13 +716,13 @@ def pulse():
 
 def atrGraph():
     atrAni = FuncAnimation(plt.gcf(),pulse, interval = 100)
-#     # plt.tight_layout()
-#     # plt.show()
-#     # fig = plt.figure()
-#     # ax = fig.add_subplot(111)
-#     # plt.ion()
-    # fig.show()
-    # fig.canvas.draw()
+#  #plt.tight_layout()
+# # plt.show()
+# # fig = plt.figure()
+# # ax = fig.add_subplot(111)
+# # plt.ion()
+# # fig.show()
+#   fig.canvas.draw()
     # for i in range(0,10):
     #     ax.clear()
     #     ax.plot(matrix[i,:])
@@ -787,26 +773,16 @@ def dataValuesAOO(oldWin, title, delCom):
     if (delCom == "yes"):
         oldWin.destroy()
 
-<<<<<<< Updated upstream
     print(user_id)
     print(user_list[user_id].AOO)
 
-    serial.updateParam(17,3)
-    serial.updateParam(18,1)
-    serial.updateParam(19,1)
-    serial.updateParam(15,0)
+    connection(17,3)
+    connection(18,1)
+    connection(19,1)
+    connection(15,0)
+    
     # Lower Rate
-    lowerRateLabel = tk.Label(AOOWindow, text = "Atrial Lower Rate: " + str(user_list[user_id].AOO[0]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=50)
-    LRRangeLabel =  tk.Label(AOOWindow, text = "(Range: 343 - 2000 ms)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=85)
-
-    lowerRateEntry_1 = tk.Entry(AOOWindow, font=("Comic Sans MS", 20))
-    lowerRateEntry_1.place(x = 50, y = 140, width = 500, height = 50)
-
-    lowerRateChangeButton = tk.Button(AOOWindow, text="Change", font=("Comic Sans MS", 15), command = lambda:checkParameter(343, 2000, 0, lowerRateEntry_1, AOOWindow, 50, 215, "AOO", title, lowerRateLabel, 1))
-    lowerRateChangeButton.place(x = 50, y = 215, width = 300, height = 50)
-=======
     LRL(AOOWindow, title) # Lower Rate Limit
->>>>>>> Stashed changes
 
     # Atrial Amplitude
     amplitudeLabel = tk.Label(AOOWindow, text = "Atrial Amplitude: " + str(user_list[user_id].AOO[0]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=325)
@@ -815,11 +791,7 @@ def dataValuesAOO(oldWin, title, delCom):
     amplitudeEntry = tk.Entry(AOOWindow, font=("Comic Sans MS", 20))
     amplitudeEntry.place(x = 50, y = 400, width = 500, height = 50)
 
-<<<<<<< Updated upstream
     amplitudeChangeButton = tk.Button(AOOWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(500, 5000, 1, amplitudeEntry, AOOWindow, 50, 475, "AOO", title, amplitudeLabel, 2))
-=======
-    amplitudeChangeButton = tk.Button(AOOWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(500, 5000, 0, amplitudeEntry, AOOWindow, 50, 475, "AOO", title, amplitudeLabel))
->>>>>>> Stashed changes
     amplitudeChangeButton.place(x = 50, y = 475, width = 300, height = 50)
 
     # Atrial Pulse Width
@@ -829,11 +801,7 @@ def dataValuesAOO(oldWin, title, delCom):
     pWEntry = tk.Entry(AOOWindow, font=("Comic Sans MS", 20))
     pWEntry.place(x = 50, y = 675, width = 500, height = 50)
 
-<<<<<<< Updated upstream
     pwEntryChangeButton = tk.Button(AOOWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(1, 30, 2, pWEntry, AOOWindow, 50, 750, "AOO", title, pWLabel, 3))
-=======
-    pwEntryChangeButton = tk.Button(AOOWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(1, 30, 1, pWEntry, AOOWindow, 50, 750, "AOO", title, pWLabel))
->>>>>>> Stashed changes
     pwEntryChangeButton.place(x = 50, y = 750, width = 300, height = 50)
     
     # Switch Button for AAI Window
@@ -856,15 +824,12 @@ def dataValuesVOO(oldWin, title, delCom):
     if (delCom == "yes"):
         oldWin.destroy()
 
-<<<<<<< Updated upstream
-    serial.updateParam(17,3)
-    serial.updateParam(18,1)
-    serial.updateParam(19,2)
-    serial.updateParam(15,0)    
+    connection(17,3)
+    connection(18,1)
+    connection(19,2)
+    connection(15,0)    
 
-=======
     '''
->>>>>>> Stashed changes
     lowerRateLabel = tk.Label(VOOWindow, text = "Ventrical Lower Rate: " + str(user_list[user_id].VOO[0]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=50)
     LRRangeLabel =  tk.Label(VOOWindow, text = "(Range: 343 - 2000 ms)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=85)
 
@@ -878,41 +843,24 @@ def dataValuesVOO(oldWin, title, delCom):
     # Lower Rate Limit
     LRL(VOOWindow, title)
 
-<<<<<<< Updated upstream
     # Ventricle Amplitude
-    amplitudeLabel = tk.Label(VOOWindow, text = "Ventrical Amplitude: " + str(user_list[user_id].VOO[1]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=325)
-=======
-    # Atrial Amplitude
     amplitudeLabel = tk.Label(VOOWindow, text = "Ventricle Amplitude: " + str(user_list[user_id].VOO[0]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=325)
->>>>>>> Stashed changes
     amplitudeRangeLabel =  tk.Label(VOOWindow, text = "(Range: 500-5000mV)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=360)
 
     amplitudeEntry = tk.Entry(VOOWindow, font=("Comic Sans MS", 20))
     amplitudeEntry.place(x = 50, y = 400, width = 500, height = 50)
 
-<<<<<<< Updated upstream
     amplitudeChangeButton = tk.Button(VOOWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(500, 5000, 1, amplitudeEntry, VOOWindow, 50, 475, "VOO", title, amplitudeLabel,4))
     amplitudeChangeButton.place(x = 50, y = 475, width = 300, height = 50)
 
     # Ventricle Pulse Width
-    pWLabel = tk.Label(VOOWindow, text = "Ventrical Pulse Width: " + str(user_list[user_id].VOO[2]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=600)
-=======
-    amplitudeChangeButton = tk.Button(VOOWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(500, 5000, 0, amplitudeEntry, VOOWindow, 50, 475, "VOO", title, amplitudeLabel))
-    amplitudeChangeButton.place(x = 50, y = 475, width = 300, height = 50)
-
-    # Atrial Pulse Width
-    pWLabel = tk.Label(VOOWindow, text = "Ventricle Pulse Width: " + str(user_list[user_id].VOO[1]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=600)
->>>>>>> Stashed changes
+    pWLabel = tk.Label(VOOWindow, text = "Ventricle Pulse Width: " + str(user_list[user_id].VOO[2]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=600)
     pWLabel =  tk.Label(VOOWindow, text = "(Range: 1-30ms)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=635)
 
     pWEntry = tk.Entry(VOOWindow, font=("Comic Sans MS", 20))
     pWEntry.place(x = 50, y = 675, width = 500, height = 50)
 
-<<<<<<< Updated upstream
-    pwEntryChangeButton = tk.Button(VOOWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(1, 30, 2, pWEntry, VOOWindow, 50, 750, "VOO", title, pWLabel,5))
-=======
-    pwEntryChangeButton = tk.Button(VOOWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(1, 30, 1, pWEntry, VOOWindow, 50, 750, "VOO", title, pWLabel))
->>>>>>> Stashed changes
+    pwEntryChangeButton = tk.Button(VOOWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(1, 30, 2, pWEntry, VOOWindow, 50, 750, "VOO", title, pWLabel, 5))
     pwEntryChangeButton.place(x = 50, y = 750, width = 300, height = 50)
 
     # Switch Button for AAI Window
@@ -943,10 +891,10 @@ def dataValuesAAI1(oldWin, title, delCom):
         oldWin.destroy()
     
     dataValuesAOO(AAIWindow, title, "yes")
-    serial.updateParam(17,1)
-    serial.updateParam(18,2)
-    serial.updateParam(19,1)
-    serial.updateParam(15,0)
+    connection(17,1)
+    connection(18,2)
+    connection(19,1)
+    connection(15,0)
 
 def dataValuesAAI2(oldWin, title, delCom):
     if (delCom == "yes"):
@@ -957,14 +905,12 @@ def dataValuesAAI2(oldWin, title, delCom):
 
     graph(AAIWindow)
 
-<<<<<<< Updated upstream
-    serial.updateParam(17,1)
-    serial.updateParam(18,2)
-    serial.updateParam(19,1)
-    serial.updateParam(15,0)
-=======
+    connection(17,1)
+    connection(18,2)
+    connection(19,1)
+    connection(15,0)
+
     hys(AAIWindow, title)
->>>>>>> Stashed changes
 
     # ARP
     ARPLabel = tk.Label(AAIWindow, text = "ARP: " + str(user_list[user_id].AAI[0]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=325)
@@ -976,12 +922,9 @@ def dataValuesAAI2(oldWin, title, delCom):
     ARPEntryChangeButton_2 = tk.Button(AAIWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(150, 500, 0, ARPEntry, AAIWindow, 50, 475, "AAI", title, ARPLabel))
     ARPEntryChangeButton_2.place(x = 50, y = 475, width = 300, height = 50)
 
-<<<<<<< Updated upstream
     ARPEntryChangeButton_2 = tk.Button(AAIWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(150, 500, 0, ARPEntry, AAIWindow, 50, 350, "AAI", title, ARPLabel, 7))
     ARPEntryChangeButton_2.place(x = 50, y = 350, width = 300, height = 50)
     
-=======
->>>>>>> Stashed changes
     # ASensitivity
     A_sensLabel = tk.Label(AAIWindow, text = "Atrial Sensitivity: " + str(user_list[user_id].AAI[1]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=600)
     A_sensLabel =  tk.Label(AAIWindow, text = "(Range: 3 - 5 V)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=635)
@@ -989,13 +932,8 @@ def dataValuesAAI2(oldWin, title, delCom):
     A_sensEntry = tk.Entry(AAIWindow, font=("Comic Sans MS", 20))
     A_sensEntry.place(x = 50, y = 675, width = 500, height = 50)
 
-<<<<<<< Updated upstream
     A_sensEntryChangeButton_2 = tk.Button(AAIWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(3000, 5000, 1, A_sensEntry, AAIWindow, 50, 635, "AAI", title, A_sensLabel,8))
     A_sensEntryChangeButton_2.place(x = 50, y = 635, width = 300, height = 50)
-=======
-    A_sensEntryChangeButton_2 = tk.Button(AAIWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(3, 5, 1, A_sensEntry, AAIWindow, 50, 750, "AAI", title, A_sensLabel))
-    A_sensEntryChangeButton_2.place(x = 50, y = 750, width = 300, height = 50)
->>>>>>> Stashed changes
 
     # goes to previous window
     if (title == 'AAIR'):
@@ -1023,10 +961,10 @@ def dataValuesVVI1(oldWin, title, delCom):
     
     dataValuesVOO(VVIWindow, title, "yes")
 
-    serial.updateParam(17,2)
-    serial.updateParam(18,2)
-    serial.updateParam(19,2)
-    serial.updateParam(15,0)
+    connection(17,2)
+    connection(18,2)
+    connection(19,2)
+    connection(15,0)
 
 def dataValuesVVI2(oldWin, title, delCom):
     if (delCom == "yes"):
@@ -1037,16 +975,13 @@ def dataValuesVVI2(oldWin, title, delCom):
 
     hys(VVIWindow, title)
     graph(VVIWindow)
-<<<<<<< Updated upstream
 
-    serial.updateParam(17,2)
-    serial.updateParam(18,2)
-    serial.updateParam(19,2)
-    serial.updateParam(15,0)
+    connection(17,2)
+    connection(18,2)
+    connection(19,2)
+    connection(15,0)
 
-=======
     '''
->>>>>>> Stashed changes
     # VRP
     VRPLabel = tk.Label(VVIWindow, text = "VRP: " + str(user_list[user_id].VVI[0]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=200)
     VRPLabel =  tk.Label(VVIWindow, text = "(Range: 150-500 ms)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=235)
@@ -1065,13 +1000,8 @@ def dataValuesVVI2(oldWin, title, delCom):
     V_sensEntry = tk.Entry(VVIWindow, font=("Comic Sans MS", 20))
     V_sensEntry.place(x = 50, y = 375, width = 500, height = 50)
 
-<<<<<<< Updated upstream
     V_sensEntryChangeButton_2 = tk.Button(VVIWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(3000, 5000, 1, V_sensEntry, VVIWindow, 50, 635, "VVI", title, V_sensLabel,9))
     V_sensEntryChangeButton_2.place(x = 50, y = 635, width = 300, height = 50)
-=======
-    V_sensEntryChangeButton_2 = tk.Button(VVIWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(3, 5, 0, V_sensEntry, VVIWindow, 50, 460, "VVI", title, V_sensLabel))
-    V_sensEntryChangeButton_2.place(x = 50, y = 460, width = 300, height = 50)
->>>>>>> Stashed changes
 
     if (title == "VVIR" or title == "DDDR"):
         nextButton = tk.Button(VVIWindow, text = "Next Page", font = ("Comic Sans MS", 15), command = lambda: dataValuesDOO1(VVIWindow, title, "yes"))
@@ -1093,10 +1023,10 @@ def dataValuesDOO1(oldWin, title, delCom):
     if (delCom == "yes"):
         oldWin.destroy()
 
-    serial.updateParam(17,3)
-    serial.updateParam(18,1)
-    serial.updateParam(19,1)
-    serial.updateParam(15,0)
+    connection(17,3)
+    connection(18,1)
+    connection(19,1)
+    connection(15,0)
     
     # Maximum Sensor Rate Limit
     maxSenLabel= tk.Label(DOOWindow, text = "Maximum Sensor Rate Limit: " + str(user_list[user_id].DOO[0]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=50)
@@ -1166,10 +1096,10 @@ def dataValuesDOO2(oldWin, title, delCom):
 
     graph(DOOWindow)
 
-    serial.updateParam(17,3)
-    serial.updateParam(18,1)
-    serial.updateParam(19,1)
-    serial.updateParam(15,0)
+    connection(17,3)
+    connection(18,1)
+    connection(19,1)
+    connection(15,0)
 
     # response
     responseLabel = tk.Label(DOOWindow, text = "Response Factor: " + str(user_list[user_id].DOO[3]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=200)
@@ -1218,10 +1148,10 @@ def dataValuesAOOR1(oldWin, title, delCom):
     
     dataValuesAOO(tk.Toplevel(root,  height = root.winfo_screenheight(), width = root.winfo_screenwidth(), bg = '#FFB6C1'), title, "yes")
 
-    serial.updateParam(17,3)
-    serial.updateParam(18,1)
-    serial.updateParam(19,1)
-    serial.updateParam(15,1)
+    connection(17,3)
+    connection(18,1)
+    connection(19,1)
+    connection(15,1)
 
 def dataValuesVOOR1(oldWin, title, delCom):
     if (delCom == "yes"):
@@ -1229,10 +1159,10 @@ def dataValuesVOOR1(oldWin, title, delCom):
     
     dataValuesVOO(tk.Toplevel(root,  height = root.winfo_screenheight(), width = root.winfo_screenwidth(), bg = '#FFB6C1'), title, "yes")
 
-    serial.updateParam(17,3)
-    serial.updateParam(18,1)
-    serial.updateParam(19,2)
-    serial.updateParam(15,1)
+    connection(17,3)
+    connection(18,1)
+    connection(19,2)
+    connection(15,1)
 
 def dataValuesAAIR1(oldWin, title, delCom):
     if (delCom == "yes"):
@@ -1240,10 +1170,10 @@ def dataValuesAAIR1(oldWin, title, delCom):
     
     dataValuesAAI1(tk.Toplevel(root,  height = root.winfo_screenheight(), width = root.winfo_screenwidth(), bg = '#FFB6C1'), title, "yes")
 
-    serial.updateParam(17,1)
-    serial.updateParam(18,2)
-    serial.updateParam(19,1)
-    serial.updateParam(15,1)
+    connection(17,1)
+    connection(18,2)
+    connection(19,1)
+    connection(15,1)
 
 def dataValuesVVIR1(oldWin, title, delCom):
     if (delCom == "yes"):
@@ -1251,10 +1181,10 @@ def dataValuesVVIR1(oldWin, title, delCom):
     
     dataValuesVVI1(tk.Toplevel(root,  height = root.winfo_screenheight(), width = root.winfo_screenwidth(), bg = '#FFB6C1'), title, "yes")
 
-    serial.updateParam(17,2)
-    serial.updateParam(18,2)
-    serial.updateParam(19,2)
-    serial.updateParam(15,1)
+    connection(17,2)
+    connection(18,2)
+    connection(19,2)
+    connection(15,1)
 
 def dataValuesDOOR(oldWin, title, delCom):
     if (delCom == "yes"):
@@ -1262,10 +1192,11 @@ def dataValuesDOOR(oldWin, title, delCom):
     
     dataValuesAOO(tk.Toplevel(root,  height = root.winfo_screenheight(), width = root.winfo_screenwidth(), bg = '#FFB6C1'), title, "yes")
 
-    serial.updateParam(17,3)
-    serial.updateParam(18,1)
-    serial.updateParam(19,1)
-    serial.updateParam(15,1)
+    connection(17,3)
+    connection(18,1)
+    connection(19,1)
+    connection(15,1)
+
 def dataValuesDOOR2(oldWin, title, delCom):
     if (delCom == "yes"):
         oldWin.destroy()
@@ -1275,16 +1206,12 @@ def dataValuesDOOR2(oldWin, title, delCom):
 
     graph(DOORWindow)
 
-<<<<<<< Updated upstream
-    serial.updateParam(17,3)
-    serial.updateParam(18,1)
-    serial.updateParam(19,1)
-    serial.updateParam(15,1)
+    connection(17,3)
+    connection(18,1)
+    connection(19,1)
+    connection(15,1)
 
     responseLabel = tk.Label(DOORWindow, text = "Fixed Atrial Ventrical (AV) Delay: " + str(user_list[user_id].DOOR[0]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=200)
-=======
-    responseLabel = tk.Label(DOORWindow, text = "Fixed Atrial Ventricle (AV) Delay: " + str(user_list[user_id].DOOR[0]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=200)
->>>>>>> Stashed changes
     responseLabel =  tk.Label(DOORWindow, text ="(Range: 70-300 ms)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=235)
 
     responseEntry = tk.Entry(DOORWindow, font=("Comic Sans MS", 20))
@@ -1302,10 +1229,10 @@ def dataValuesDDDR(oldWin, title, delCom):
     
     dataValuesAAI1(tk.Toplevel(root,  height = root.winfo_screenheight(), width = root.winfo_screenwidth(), bg = '#FFB6C1'), title, "yes")
 
-    serial.updateParam(17,3)
-    serial.updateParam(18,3)
-    serial.updateParam(19,3)
-    serial.updateParam(15,1)
+    connection(17,3)
+    connection(18,3)
+    connection(19,3)
+    connection(15,1)
     
 def dataValuesDDDR2(oldWin, title, delCom):
     if (delCom == "yes"):
@@ -1316,17 +1243,15 @@ def dataValuesDDDR2(oldWin, title, delCom):
 
     graph(DDDRWindow)
 
-<<<<<<< Updated upstream
-    serial.updateParam(17,3)
-    serial.updateParam(18,3)
-    serial.updateParam(19,3)
-    serial.updateParam(15,1)
+    connection(17,3)
+    connection(18,3)
+    connection(19,3)
+    connection(15,1)
 
-    responseLabel = tk.Label(DDDRWindow, text = "RVARP: " + str(user_list[user_id].DDDR[0]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=200)
-=======
+    responseLabel = tk.Label(DDDRWindow, text = "PVARP: " + str(user_list[user_id].DDDR[0]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=200)
+    
     '''
     responseLabel = tk.Label(DDDRWindow, text = "PVARP: " + str(user_list[user_id].DDDR[0]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=200)
->>>>>>> Stashed changes
     responseLabel =  tk.Label(DDDRWindow, text ="(Range: 150 - 500 ms)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=235)
 
     responseEntry = tk.Entry(DDDRWindow, font=("Comic Sans MS", 20))
@@ -1404,11 +1329,6 @@ def main():
     signupButton.place(x = 350, y = 675, width = 100, height = 50)
 
     root.mainloop()
-
-def connect():
-    return connectOrNot
     
-
-
 main() # runs program
       # %%
