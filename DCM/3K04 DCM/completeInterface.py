@@ -606,6 +606,13 @@ def checkParameter(min, max, i, new_value, window, x_in, y_in, mode, title, labe
     except ValueError:
         invalidEntry = tk.Label(window, text = "Invalid Entry",bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x = x_in + 320, y = y_in)
 
+
+def deactivate():
+    # window.destroy()
+    global run
+    run = False
+    plt.close()
+
 def graph(window):
     #This part goes in the chooseDisplay function where the other buttons are
     atrGraphButton = tk.Button(window, text="Atrium Graph", font=("Comic Sans MS", 15),command = lambda:atrGraph(window))
@@ -616,6 +623,9 @@ def graph(window):
 
     dualGraphButton = tk.Button(window, text="Display Both Graphs", font=("Comic Sans MS", 15),command = lambda:dualGraph(window))
     dualGraphButton.place(x = 830, y = 525, width = 300, height = 50)
+
+    quitButton = tk.Button(window, text="Quit", font=("Comic Sans MS", 15), command = lambda:deactivate())
+    quitButton.place(x = 830, y = 625, width = 300, height = 50)
 
 
 def randValues(arr):
@@ -652,19 +662,20 @@ def randValues(arr):
     # if(i == 6):
     #     i = 0
 
-def runFalse():
-    global run
-    run = False
+# def runFalse():
+#     global run
+#     run = False
 
 def pulse(atrium, ventricle, window):
     maxSize = 200
     sampleRate = 0.0000001
+
     dataA = [ [0]*2 for size in range(0) ]
     dataV = [ [0]*2 for size in range(0) ]
 
-    display = True
-
+    global run
     run = True
+
     while(run):
         newData = serial.requestEgram()
 
@@ -729,11 +740,7 @@ def pulse(atrium, ventricle, window):
         plt.gcf().axes[0].xaxis.get_major_formatter().set_scientific(False)
         plt.pause(sampleRate)
 
-        quitButton = tk.Button(window, text="Quit", font=("Comic Sans MS", 15), command = runFalse())
-        quitButton.place(x = 830, y = 525, width = 300, height = 50) 
     plt.show()
-
-
 
 def atrGraph(window):
     atrAni = FuncAnimation(plt.gcf(),pulse(1,0, window), interval = 100)
