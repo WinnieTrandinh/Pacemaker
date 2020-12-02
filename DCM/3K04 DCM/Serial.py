@@ -129,7 +129,7 @@ class Serial:
     def __init__(self, port):
         # COM port should be the one that shows as J-Link under device manager
         # should be called at beginning of program; probably at login
-        self.ser=serial.Serial(port, 115200, timeout = 2)
+        self.ser=serial.Serial(port, 115200, timeout = 1)
 
     # update one of the pacemaker parameters
     # for list of selectors, see above
@@ -140,6 +140,7 @@ class Serial:
         # for changing parameter
         messageS = pack('<BBfB', 34, selector, value, 42)
 
+        print(messageS)
         # write to serial
         self.ser.write(messageS)
         # response is returned but should not need to be used
@@ -182,7 +183,7 @@ class Serial:
             print("message not properly received, please try again")
 
         # debugging purposes
-        print(messageR)
+        #print(messageR)
 
         # return response value
         return messageR
