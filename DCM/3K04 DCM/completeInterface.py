@@ -523,6 +523,12 @@ def pulse(atrium, ventricle, window):
     dataA = [ [0]*2 for size in range(0) ]
     dataV = [ [0]*2 for size in range(0) ]
 
+    asLabel = [ [0]*2 for size in range(0) ]
+    apLabel = [ [0]*2 for size in range(0) ]
+
+    vsLabel = [ [0]*2 for size in range(0) ]
+    vpLabel = [ [0]*2 for size in range(0) ]
+
     global run
     run = True
 
@@ -545,8 +551,10 @@ def pulse(atrium, ventricle, window):
 
             if paced:
                 signal = float(user_list[user_id].AOO[0][-1])
+                apLabel.append([time, signal+0.25])
             elif (signal < 2.2 or signal > 2.7):
                 signal = 4.5
+                asLabel.append([time, signal+0.25])
             else:
                 signal = 0
 
@@ -557,10 +565,33 @@ def pulse(atrium, ventricle, window):
                 dataA.append([time, signal])
             #print("data: ", data)
 
+            for i in range(len(asLabel) ):
+                if asLabel[i][0] < dataA[len(dataA)-1][0]-12:
+                    asLabel.pop(0)
+                else:
+                    break
+            for i in range(len(apLabel) ):
+                if apLabel[i][0] < dataA[len(dataA)-1][0]-12:
+                    apLabel.pop(0)
+                else:
+                    break
+
             timeA =  [x[0] for x in dataA ]
             signalA =  [y[1] for y in dataA]
+
+            timeAS =  [x[0] for x in asLabel]
+            signalAS =  [y[1] for y in asLabel]
+
+            timeAP =  [x[0] for x in apLabel]
+            signalAP =  [y[1] for y in apLabel]
+
+
             plt.plot(timeA, signalA, 'r', label="Atrium")
-            plt.axis( [timeA[len(timeA)-1]-12, timeA[len(timeA)-1], 0, 5] )
+            for i in range(len(signalAS) ):
+                plt.text(timeAS[i], signalAS[i], 'AS', horizontalalignment='center')
+            for i in range(len(signalAP) ):
+                plt.text(timeAP[i], signalAP[i], 'AP', horizontalalignment='center')
+            plt.axis( [timeA[len(timeA)-1]-12, timeA[len(timeA)-1], 0, 6] )
 
         if ventricle:
             signal = newData[4]
@@ -568,8 +599,10 @@ def pulse(atrium, ventricle, window):
 
             if paced:
                 signal = float(user_list[user_id].VOO[0][-1])
+                vpLabel.append([time, signal+0.25])
             elif (signal < 2.2 or signal > 2.7):
                 signal = 4.5
+                vsLabel.append([time, signal+0.25])
             else:
                 signal = 0
 
@@ -578,12 +611,33 @@ def pulse(atrium, ventricle, window):
             else:
                 dataV.pop(0)
                 dataV.append([time, signal])
-            #print("data: ", data)
+
+            for i in range(len(vsLabel) ):
+                if vsLabel[i][0] < dataA[len(dataA)-1][0]-12:
+                    vsLabel.pop(0)
+                else:
+                    break
+            for i in range(len(vpLabel) ):
+                if vpLabel[i][0] < dataA[len(dataA)-1][0]-12:
+                    vpLabel.pop(0)
+                else:
+                    break
 
             timeV =  [x[0] for x in dataV ]
             signalV =  [y[1] for y in dataV]
+
+            timeVS =  [x[0] for x in vsLabel]
+            signalVS =  [y[1] for y in vsLabel]
+
+            timeVP =  [x[0] for x in vpLabel]
+            signalVP =  [y[1] for y in vpLabel]
+
             plt.plot(timeV, signalV, 'b', label="Ventricle")
-            plt.axis( [timeV[len(timeV)-1]-12, timeV[len(timeV)-1], 0, 5] )
+            for i in range(len(signalVS) ):
+                plt.text(timeVS[i], signalVS[i], 'VS', horizontalalignment='center')
+            for i in range(len(signalVP) ):
+                plt.text(timeVP[i], signalVP[i], 'VP', horizontalalignment='center')
+            plt.axis( [timeV[len(timeV)-1]-12, timeV[len(timeV)-1], 0, 6] )
 
         plt.legend(loc="upper left")
         plt.xlabel('Time (s)')
