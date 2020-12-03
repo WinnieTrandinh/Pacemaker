@@ -140,7 +140,7 @@ class Serial:
         # for changing parameter
         messageS = pack('<BBfB', 34, selector, value, 42)
 
-        print(messageS)
+        #print(messageS)
         # write to serial
         self.ser.write(messageS)
         # response is returned but should not need to be used

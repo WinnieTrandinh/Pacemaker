@@ -41,7 +41,7 @@ pacemakerConnected = True
 
 global run
 run = True
-serial = Serial("COM1") #serial
+serial = Serial("COM4") #serial
 
 pacemakerNumber = [1234,5453,6789,5809,2354,1765,3490,5692,3745,6890]
 
@@ -170,10 +170,12 @@ canvas.pack()
 # SERIAL FUNCTIONS
 def updateParam(selec, val):
     # serial
+    global pacemakerConnected
     response = serial.updateParam(selec, val)
     if (response[0] == 0):
-        global pacemakerConnected
         pacemakerConnected = False
+    else:
+        pacemakerConnected = True
 
 # SIGN UP FUNCTIONS
 def signup():
@@ -331,7 +333,7 @@ def changeParameter(i, new_value, window, mode, title, label):
             dataValuesAAI2(window, title, "no")
         elif (title[0] == 'V'):
             dataValuesVVI2(window, mode, "no")
-    
+
     elif (mode == "RP"):
         user_list[user_id].RP[i].append(new_value.get())
 
@@ -398,7 +400,6 @@ def checkParameter(min, max, i, new_value, window, x_in, y_in, mode, title, labe
             else:
                 # serial
                 updateParam(paramNumber, float(new_value.get() ) )
-                serial.updateParam(paramNumber,float(new_value.get()) )
                 changeParameter(i, new_value, window, mode, title, label)
         else:
             if (int(new_value.get()) > max or int(new_value.get()) < min):
@@ -406,7 +407,6 @@ def checkParameter(min, max, i, new_value, window, x_in, y_in, mode, title, labe
             else:
                 # serial
                 updateParam(paramNumber, float(new_value.get() ) )
-                serial.updateParam(paramNumber,float(new_value.get()) )
                 changeParameter(i, new_value, window, mode, title, label)
 
     except ValueError:
@@ -544,7 +544,7 @@ def pulse(atrium, ventricle, window):
             paced = newData[3]
 
             if paced:
-                signal = float(user_list[user_id].AOO[0])/1000
+                signal = float(user_list[user_id].AOO[0][-1])
             elif (signal < 2.2 or signal > 2.7):
                 signal = 4.5
             else:
@@ -567,7 +567,7 @@ def pulse(atrium, ventricle, window):
             paced = newData[5]
 
             if paced:
-                signal = float(user_list[user_id].VOO[0])/1000
+                signal = float(user_list[user_id].VOO[0][-1])
             elif (signal < 2.2 or signal > 2.7):
                 signal = 4.5
             else:
@@ -603,6 +603,38 @@ def dualGraph(window):
     dualAni = FuncAnimation(plt.gcf(),pulse(1,1, window), interval = 100)
 
 # MODES
+def changeMode(title):
+    if title[0:3] == "AOO":
+        updateParam(17,1)
+        updateParam(18,1)
+        updateParam(19,1)
+    elif title[0:3] == "VOO":
+        updateParam(17,2)
+        updateParam(18,1)
+        updateParam(19,2)
+    elif title[0:3] == "DOO":
+        updateParam(17,3)
+        updateParam(18,1)
+        updateParam(19,3)
+    elif title[0:3] == "AAI":
+        updateParam(17,1)
+        updateParam(18,2)
+        updateParam(19,1)
+    elif title[0:3] == "VVI":
+        updateParam(17,2)
+        updateParam(18,2)
+        updateParam(19,2)
+    elif title[0:3] == "DDD":
+        updateParam(17,3)
+        updateParam(18,3)
+        updateParam(19,3)
+
+    if title[-1] == "R":
+        updateParam(15,1)
+    else:
+        updateParam(15,0)
+
+
 def hys(window, title):
     #hysteris
     hysLabel = tk.Label(window, text = "Hystersis: " + str(user_list[user_id].hys[0][-1]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=50)
@@ -634,7 +666,7 @@ def RP(window, title):
 
     RPButton = tk.Button(window, text="Change", font=("Comic Sans MS", 15), command = lambda:checkParameter(150, 500, 0, RPEntry, window, 50, 215, "RP", title, RPLabel, 7))
     RPButton.place(x = 50, y = 475, width = 300, height = 50)
-    
+
 def dataValuesAOO(oldWin, title, delCom):
     AOOWindow = tk.Toplevel(root,  height = root.winfo_screenheight(), width = root.winfo_screenwidth(), bg = '#FFB6C1')
     AOOWindow.title(title)
@@ -646,11 +678,11 @@ def dataValuesAOO(oldWin, title, delCom):
         oldWin.destroy()
 
     # serial
-
-    updateParam(17,3)
-    updateParam(18,1)
-    updateParam(19,1)
-    updateParam(15,0)
+    changeMode(title)
+    # updateParam(17,3)
+    # updateParam(18,1)
+    # updateParam(19,1)
+    # updateParam(15,0)
 
     # Lower Rate
     LRL(AOOWindow, title) # Lower Rate Limit
@@ -697,11 +729,11 @@ def dataValuesVOO(oldWin, title, delCom):
         oldWin.destroy()
 
     #serial
-    # set mode to VOO
-    #updateParam(17,2)
-    #updateParam(18,1)
-    #updateParam(19,2)
-    #updateParam(15,0)
+    changeMode(title)
+    # updateParam(17,2)
+    # updateParam(18,1)
+    # updateParam(19,2)
+    # updateParam(15,0)
 
 
     # Lower Rate Limit
@@ -757,11 +789,11 @@ def dataValuesAAI1(oldWin, title, delCom):
     dataValuesAOO(AAIWindow, title, "yes")
 
     #serial
-    # AAI mode
-    #updateParam(17,1)
-    #updateParam(18,2)
-    #updateParam(19,1)
-    #updateParam(15,0)
+    changeMode(title)
+    # updateParam(17,1)
+    # updateParam(18,2)
+    # updateParam(19,1)
+    # updateParam(15,0)
 
 def dataValuesAAI2(oldWin, title, delCom):
     if (delCom == "yes"):
@@ -774,11 +806,11 @@ def dataValuesAAI2(oldWin, title, delCom):
     graph(AAIWindow)
 
     #serial
-
-    #updateParam(17,1)
-    #updateParam(18,2)
-    #updateParam(19,1)
-    #updateParam(15,0)
+    changeMode(title)
+    # updateParam(17,1)
+    # updateParam(18,2)
+    # updateParam(19,1)
+    # updateParam(15,0)
 
 
     hys(AAIWindow, title)
@@ -832,11 +864,11 @@ def dataValuesVVI1(oldWin, title, delCom):
 
     dataValuesVOO(VVIWindow, title, "yes")
     # serial
-
-    updateParam(17,2)
-    updateParam(18,2)
-    updateParam(19,2)
-    updateParam(15,0)
+    changeMode(title)
+    # updateParam(17,2)
+    # updateParam(18,2)
+    # updateParam(19,2)
+    # updateParam(15,0)
 
 def dataValuesVVI2(oldWin, title, delCom):
     if (delCom == "yes"):
@@ -850,11 +882,11 @@ def dataValuesVVI2(oldWin, title, delCom):
     graph(VVIWindow)
     connectionCheck(VVIWindow)
     #serial
-
-    #updateParam(17,2)
-    #updateParam(18,2)
-    #updateParam(19,2)
-    #updateParam(15,0)
+    changeMode(title)
+    # updateParam(17,2)
+    # updateParam(18,2)
+    # updateParam(19,2)
+    # updateParam(15,0)
 
 
     # VRP
@@ -900,11 +932,11 @@ def dataValuesDOO1(oldWin, title, delCom):
     if (delCom == "yes"):
         oldWin.destroy()
     # serial
-
-    updateParam(17,3)
-    updateParam(18,1)
-    updateParam(19,3)
-    updateParam(15,0)
+    changeMode(title)
+    # updateParam(17,3)
+    # updateParam(18,1)
+    # updateParam(19,3)
+    # updateParam(15,0)
 
     # Maximum Sensor Rate Limit
     maxSenLabel= tk.Label(DOOWindow, text = "Maximum Sensor Rate Limit: " + str(user_list[user_id].DOO[0][-1]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=50)
@@ -975,11 +1007,11 @@ def dataValuesDOO2(oldWin, title, delCom):
     graph(DOOWindow)
     connectionCheck(DOOWindow)
     # serial
-
-    updateParam(17,3)
-    updateParam(18,1)
-    updateParam(19,3)
-    updateParam(15,0)
+    changeMode(title)
+    # updateParam(17,3)
+    # updateParam(18,1)
+    # updateParam(19,3)
+    # updateParam(15,0)
 
     # response
     responseLabel = tk.Label(DOOWindow, text = "Response Factor: " + str(user_list[user_id].DOO[3][-1]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=200)
@@ -1028,11 +1060,11 @@ def dataValuesAOOR1(oldWin, title, delCom):
 
     dataValuesAOO(tk.Toplevel(root,  height = root.winfo_screenheight(), width = root.winfo_screenwidth(), bg = '#FFB6C1'), title, "yes")
     # serial
-
-    updateParam(17,1)
-    updateParam(18,1)
-    updateParam(19,1)
-    updateParam(15,1)
+    changeMode(title)
+    # updateParam(17,1)
+    # updateParam(18,1)
+    # updateParam(19,1)
+    # updateParam(15,1)
 
 def dataValuesVOOR1(oldWin, title, delCom):
     if (delCom == "yes"):
@@ -1041,11 +1073,11 @@ def dataValuesVOOR1(oldWin, title, delCom):
     dataValuesVOO(tk.Toplevel(root,  height = root.winfo_screenheight(), width = root.winfo_screenwidth(), bg = '#FFB6C1'), title, "yes")
 
     # serial
-
-    updateParam(17,2)
-    updateParam(18,1)
-    updateParam(19,2)
-    updateParam(15,1)
+    changeMode(title)
+    # updateParam(17,2)
+    # updateParam(18,1)
+    # updateParam(19,2)
+    # updateParam(15,1)
 
 def dataValuesAAIR1(oldWin, title, delCom):
     if (delCom == "yes"):
@@ -1054,11 +1086,11 @@ def dataValuesAAIR1(oldWin, title, delCom):
     dataValuesAAI1(tk.Toplevel(root,  height = root.winfo_screenheight(), width = root.winfo_screenwidth(), bg = '#FFB6C1'), title, "yes")
 
     # serial
-
-    updateParam(17,1)
-    updateParam(18,2)
-    updateParam(19,1)
-    updateParam(15,1)
+    changeMode(title)
+    # updateParam(17,1)
+    # updateParam(18,2)
+    # updateParam(19,1)
+    # updateParam(15,1)
 
 def dataValuesVVIR1(oldWin, title, delCom):
     if (delCom == "yes"):
@@ -1067,11 +1099,11 @@ def dataValuesVVIR1(oldWin, title, delCom):
     dataValuesVVI1(tk.Toplevel(root,  height = root.winfo_screenheight(), width = root.winfo_screenwidth(), bg = '#FFB6C1'), title, "yes")
 
     # serial
-
-    updateParam(17,2)
-    updateParam(18,2)
-    updateParam(19,2)
-    updateParam(15,1)
+    changeMode(title)
+    # updateParam(17,2)
+    # updateParam(18,2)
+    # updateParam(19,2)
+    # updateParam(15,1)
 
 def dataValuesDOOR(oldWin, title, delCom):
     if (delCom == "yes"):
@@ -1080,11 +1112,11 @@ def dataValuesDOOR(oldWin, title, delCom):
     dataValuesAOO(tk.Toplevel(root,  height = root.winfo_screenheight(), width = root.winfo_screenwidth(), bg = '#FFB6C1'), title, "yes")
 
     # serial
-
-    updateParam(17,3)
-    updateParam(18,1)
-    updateParam(19,3)
-    updateParam(15,1)
+    changeMode(title)
+    # updateParam(17,3)
+    # updateParam(18,1)
+    # updateParam(19,3)
+    # updateParam(15,1)
 
 def dataValuesDOOR2(oldWin, title, delCom):
     if (delCom == "yes"):
@@ -1096,11 +1128,11 @@ def dataValuesDOOR2(oldWin, title, delCom):
     graph(DOORWindow)
     connectionCheck(DOORWindow)
     # serial
-
-    updateParam(17,3)
-    updateParam(18,1)
-    updateParam(19,3)
-    updateParam(15,1)
+    changeMode(title)
+    # updateParam(17,3)
+    # updateParam(18,1)
+    # updateParam(19,3)
+    # updateParam(15,1)
 
 
     responseLabel = tk.Label(DOORWindow, text = "Fixed Atrial Ventrical (AV) Delay: " + str(user_list[user_id].DOOR[0][-1]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=200)
@@ -1121,11 +1153,11 @@ def dataValuesDDDR(oldWin, title, delCom):
 
     dataValuesAAI1(tk.Toplevel(root,  height = root.winfo_screenheight(), width = root.winfo_screenwidth(), bg = '#FFB6C1'), title, "yes")
     # serial
-
-    updateParam(17,3)
-    updateParam(18,3)
-    updateParam(19,3)
-    updateParam(15,1)
+    changeMode(title)
+    # updateParam(17,3)
+    # updateParam(18,3)
+    # updateParam(19,3)
+    # updateParam(15,1)
 
 def dataValuesDDDR2(oldWin, title, delCom):
     if (delCom == "yes"):
@@ -1137,11 +1169,11 @@ def dataValuesDDDR2(oldWin, title, delCom):
     graph(DDDRWindow)
     connectionCheck(DDDRWindow)
     # serial
-
-    updateParam(17,3)
-    updateParam(18,3)
-    updateParam(19,3)
-    updateParam(15,1)
+    changeMode(title)
+    # updateParam(17,3)
+    # updateParam(18,3)
+    # updateParam(19,3)
+    # updateParam(15,1)
 
 
     responseLabel = tk.Label(DDDRWindow, text = "PVARP: " + str(user_list[user_id].DDDR[0]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=200)
