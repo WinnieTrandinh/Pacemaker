@@ -171,11 +171,16 @@ canvas.pack()
 def updateParam(selec, val):
     # serial
     global pacemakerConnected
-    response = serial.updateParam(selec, val)
-    if (response[0] == 0):
+    try:
+        response = serial.updateParam(selec, val)
+        if (response[0] == 0):
+            pacemakerConnected = False
+        else:
+            pacemakerConnected = True
+    except:
         pacemakerConnected = False
-    else:
-        pacemakerConnected = True
+    return pacemakerConnected
+
 
 # SIGN UP FUNCTIONS
 def signup():
@@ -399,14 +404,14 @@ def checkParameter(min, max, i, new_value, window, x_in, y_in, mode, title, labe
                 invalidEntry = tk.Label(window, text = "Out of Range",bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x = x_in + 320, y = y_in)
             else:
                 # serial
-                updateParam(paramNumber, float(new_value.get() ) )
+                connected = updateParam(paramNumber, float(new_value.get() ) )
                 changeParameter(i, new_value, window, mode, title, label)
         else:
             if (int(new_value.get()) > max or int(new_value.get()) < min):
                 invalidEntry = tk.Label(window, text = "Out of Range",bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x = x_in + 320, y = y_in)
             else:
                 # serial
-                updateParam(paramNumber, float(new_value.get() ) )
+                connected = updateParam(paramNumber, float(new_value.get() ) )
                 changeParameter(i, new_value, window, mode, title, label)
 
     except ValueError:
