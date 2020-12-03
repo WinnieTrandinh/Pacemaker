@@ -419,9 +419,8 @@ def menu1(pacingModeWindow):
 
     pacingLabel = tk.Label(pacingModeWindow, text = "Pacing Modes", bg = '#FFB6C1', font = ("Comic Sans MS", 20)).place(x = 150, y = 75, width = 500, height = 50)
 
-
     if(pacemakerConnected == False):
-        pacemakerLabel = tk.Label(pacingModeWindow, text = "Pacemaker " + str(pacemakerNumber[user_id]) +  " Connected", bg = '#FF0000', font = ("Comic Sans MS", 10)).place(x = 550, y = 650, width = 200, height = 50)
+        pacemakerLabel = tk.Label(pacingModeWindow, text = "Pacemaker " + str(pacemakerNumber[user_id]) +  " Disconnected", bg = '#FF0000', font = ("Comic Sans MS", 10)).place(x = 550, y = 650, width = 200, height = 50)
     elif(pacemakerConnected == True):
         pacemakerLabel = tk.Label(pacingModeWindow, text = "Pacemaker " + str(pacemakerNumber[user_id]) +  " Connected", bg = '#00FF00', font = ("Comic Sans MS", 10)).place(x = 550, y = 650, width = 200, height = 50)
 
@@ -491,6 +490,12 @@ def menu3(pacingModeWindow):
     prevButton.place(x = 50, y = 20, width = 30, height = 50)
 
 # GRAPH FUNCTIONS
+def connectionCheck(window):
+    if(pacemakerConnected == False):
+        pacemakerLabel = tk.Label(window, text = "Pacemaker " + str(pacemakerNumber[user_id]) +  " Disconnected", bg = '#FF0000', font = ("Comic Sans MS", 10)).place(x = 1200, y = 40, width = 200, height = 50)
+    elif(pacemakerConnected == True):
+        pacemakerLabel = tk.Label(window, text = "Pacemaker " + str(pacemakerNumber[user_id]) +  " Connected", bg = '#00FF00', font = ("Comic Sans MS", 10)).place(x = 1200, y = 40, width = 200, height = 50)
+
 def deactivate():
     # window.destroy()
     global run
@@ -634,6 +639,7 @@ def dataValuesAOO(oldWin, title, delCom):
     AOOWindow = tk.Toplevel(root,  height = root.winfo_screenheight(), width = root.winfo_screenwidth(), bg = '#FFB6C1')
     AOOWindow.title(title)
 
+    connectionCheck(AOOWindow)
     graph(AOOWindow)
 
     if (delCom == "yes"):
@@ -685,6 +691,7 @@ def dataValuesVOO(oldWin, title, delCom):
     VOOWindow.title(title)
 
     graph(VOOWindow)
+    connectionCheck(VOOWindow)
 
     if (delCom == "yes"):
         oldWin.destroy()
@@ -763,6 +770,7 @@ def dataValuesAAI2(oldWin, title, delCom):
     AAIWindow = tk.Toplevel(root,  height = root.winfo_screenheight(), width = root.winfo_screenwidth(), bg = '#FFB6C1')
     AAIWindow.title(title)
 
+    connectionCheck(AAIWindow)
     graph(AAIWindow)
 
     #serial
@@ -840,7 +848,7 @@ def dataValuesVVI2(oldWin, title, delCom):
     hys(VVIWindow, title)
     RP(VVIWindow, title)
     graph(VVIWindow)
-
+    connectionCheck(VVIWindow)
     #serial
 
     #updateParam(17,2)
@@ -887,6 +895,7 @@ def dataValuesDOO1(oldWin, title, delCom):
     DOOWindow.title(title)
 
     graph(DOOWindow)
+    connectionCheck(DOOWindow)
 
     if (delCom == "yes"):
         oldWin.destroy()
@@ -964,7 +973,7 @@ def dataValuesDOO2(oldWin, title, delCom):
     DOOWindow.title(title)
 
     graph(DOOWindow)
-
+    connectionCheck(DOOWindow)
     # serial
 
     updateParam(17,3)
@@ -1085,7 +1094,7 @@ def dataValuesDOOR2(oldWin, title, delCom):
     DOORWindow.title(title)
 
     graph(DOORWindow)
-
+    connectionCheck(DOORWindow)
     # serial
 
     updateParam(17,3)
@@ -1126,7 +1135,7 @@ def dataValuesDDDR2(oldWin, title, delCom):
     DDDRWindow.title(title)
 
     graph(DDDRWindow)
-
+    connectionCheck(DDDRWindow)
     # serial
 
     updateParam(17,3)
