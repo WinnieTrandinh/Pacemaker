@@ -129,7 +129,8 @@ class Serial:
     def __init__(self, port):
         # COM port should be the one that shows as J-Link under device manager
         # should be called at beginning of program; probably at login
-        self.ser=serial.Serial(port, 115200, timeout = 1)
+        #self.ser=serial.Serial(port, 115200, timeout = 1)
+        self.port = port
 
     # update one of the pacemaker parameters
     # for list of selectors, see above
@@ -137,14 +138,18 @@ class Serial:
         # convert data into bytearray using pack(<format string>, <value1>, ..., <valueN> )
         # see DCM -> pacemaker above for serial packet format
 
+        ser = serial.Serial(self.port, 115200, timeout = 1)
+
         # for changing parameter
         messageS = pack('<BBfB', 34, selector, value, 42)
 
         #print(messageS)
         # write to serial
-        self.ser.write(messageS)
+        ser.write(messageS)
         # response is returned but should not need to be used
-        response = self.checkResponse()
+        response = self.checkResponse(ser)
+
+        self.closePort(ser)
         return response
 
     # used to request egram data
@@ -152,19 +157,22 @@ class Serial:
     #   form: [22, time (sec), atrSignal (V), atrPaced (bool), ventSignal, ventPaced, 42]
     def requestEgram(self):
         # for getting egram data
+        ser = serial.Serial(self.port, 115200, timeout = 1)
         messageS = pack('<BBfB', 85, 0, 0, 42)
 
         # write to serial
-        self.ser.write(messageS)
+        ser.write(messageS)
         # get egram data from response
-        response = self.checkResponse()
+        response = self.checkResponse(ser)
+
+        self.closePort(ser)
         return response
 
 
     # check if response valid and return response
-    def checkResponse(self):
+    def checkResponse(self, ser):
         # read response from pacemaker
-        messageR_Raw = self.ser.read(16)
+        messageR_Raw = ser.read(16)
 
         # check if response valid
         try:
@@ -191,8 +199,8 @@ class Serial:
 
     # should close the port at end of program if possible
     # will automatically close if program closes
-    def closePort(self):
-        self.ser.close()
+    def closePort(self, ser):
+        ser.close()
 
 
 # ***********************  example calls  *************************************
