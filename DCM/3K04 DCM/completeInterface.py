@@ -851,7 +851,7 @@ def dataValuesAOO(oldWin, title, delCom):
         switchButton = tk.Button(AOOWindow, text = "Next Page", font = ("Comic Sans MS", 15), command = lambda: dataValuesROO1(AOOWindow, title, "yes"))
         switchButton.place(x = 1100, y = 800, width = 300, height = 50)
     elif (title == "DOO"):
-        switchButton = tk.Button(AOOWindow, text = "Next Page", font = ("Comic Sans MS", 15), command = lambda: dataValuesROO1(VOOWindow, title, "yes"))
+        switchButton = tk.Button(AOOWindow, text = "Next Page", font = ("Comic Sans MS", 15), command = lambda: dataValuesVOO(AOOWindow, title, "yes"))
         switchButton.place(x = 1100, y = 800, width = 300, height = 50)
     elif (title == "AAI" or title == "AAIR" or title == "DDDR"):
         switchButton = tk.Button(AOOWindow, text = "Next Page", font = ("Comic Sans MS", 15), command = lambda: dataValuesAAI2(AOOWindow, title, "yes"))
@@ -919,7 +919,7 @@ def dataValuesVOO(oldWin, title, delCom):
         switchButton.place(x = 1100, y = 800, width = 300, height = 50)
     elif (title == "DOO"):
         prevButton = tk.Button(VOOWindow, text = "Previous Page", font = ("Comic Sans MS", 15), command = lambda: dataValuesAOO(VOOWindow, title, "yes"))
-        prevButton.place(x = 775, y = 800, width = 300, height = 50)
+        prevButton.place(x = 1100, y = 800, width = 300, height = 50)
 
 def dataValuesAAI1(oldWin, title, delCom):
     AAIWindow = tk.Toplevel(root,  height = root.winfo_screenheight(), width = root.winfo_screenwidth(), bg = '#FFB6C1')
