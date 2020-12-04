@@ -5,13 +5,13 @@
 
 # LIBRARIES
 import tkinter as tk
-import random
+#import random
 import matplotlib.pyplot as plt
-import numpy as np
+#import numpy as np
 from Serial import *
-from itertools import count
+#from itertools import count
 from matplotlib.animation import FuncAnimation
-import time
+#import time
 
 class User:
     def __init__(self, name, password, AOO, VOO, LRL, AAI, VVI, hys, RP, ROO, DOOR, DDDR):
@@ -43,19 +43,29 @@ global run
 run = True
 
 global close
-serial = Serial("COM1") #serial
+serial = Serial("COM4") #serial
 
 pacemakerNumber = [1234,5453,6789,5809,2354,1765,3490,5692,3745,6890]
 
-defaultAOO = [[1.0], [10]]
-defaultVOO = [[1.0], [10]]
+# [atrium amp, atrium pulse width
+defaultAOO = [[5.0], [10]]
+# [ventricle amp, ventricle pulse width]
+defaultVOO = [[5.0], [10]]
+# [LRL]
 defaultLRL = [[1000]]
-defaultHys = [[4000]]
-defaultAAI = [[0.5]]
+# [hysteresis interval]
+defaultHys = [[500]]
+# [atrium sensitivity]
+defaultAAI = [[3.5]]
+# [ventricle sensitivity]
 defaultVVI = [[3.5]]
-defaultROO = [[500], [0.1], [20], [8], [500]]
-defaultDOOR = [[300]]
+# [MSR, activity threshold, reaction time, response factor, recovery factor]
+defaultROO = [[500], [0.1], [5], [16], [8]]
+# [AV delay]
+defaultDOOR = [[100]]
+# [PVARP]
 defaultDDDR = [[300]]
+# [RP]
 defaultRP = [[400]]
 
 def readFile(fileName):
@@ -220,7 +230,7 @@ def signupCheck(signupWindow, name, password, confirmPassword):
     elif(password.get() != confirmPassword.get()):
         incorrectPassLabel = tk.Label(signupWindow, text = "Password Doesn't Match", font = ("Comic Sans MS", 20)).place(x = 150, y = 550, width = 500, height = 50)
     else:
-        user_list.append(User(name.get(), confirmPassword.get(), defaultAOO, defaultVOO, defaultLRL, defaultAAI, defaultVVI, defaultHys, defaultROO, defaultDOOR, defaultDDDR))
+        user_list.append(User(name.get(), confirmPassword.get(), defaultAOO, defaultVOO, defaultLRL, defaultAAI, defaultVVI, defaultHys, defaultRP, defaultROO, defaultDOOR, defaultDDDR))
 
         f = open("pacemaker_users.txt", "a")
         f.write(name.get() + "\n")
@@ -236,8 +246,9 @@ def signupCheck(signupWindow, name, password, confirmPassword):
         signupWriteFile("pacemakerVVI.txt", defaultVVI)
         signupWriteFile("pacemakerROO.txt", defaultROO)
         signupWriteFile("pacemakerDOOR.txt", defaultDOOR)
-        signupWriteFile("pacemakerDDDR.txt", defaultDOOR)
+        signupWriteFile("pacemakerDDDR.txt", defaultDDDR)
         signupWriteFile("pacemakerHys.txt", defaultHys)
+        signupWriteFile("pacemakerRP.txt", defaultRP)
         signupWriteFile("pacemakerLRL.txt", defaultLRL)
 
         root.after(250, signupWindow.destroy())
@@ -303,7 +314,7 @@ def changeParameter(i, new_value, window, mode, title, label):
         info[user_id][i].append(int(user_list[user_id].LRL[i][-1]))
         changeParamWriteFile("pacemakerLRL.txt", info)
 
-        dataValuesAOO(window, title, "no")
+        #dataValuesAOO(window, title, "no")
 
         if (mode[3] == 'A'):
             dataValuesAOO(window, title, "no")
@@ -647,12 +658,12 @@ def pulse(atrium, ventricle, window):
                 dataA.append([time, signal])
             #print("data: ", data)
 
-            for i in range(len(asLabel) ):
+            for i in range(len(asLabel)-1):
                 if asLabel[i][0] < dataA[len(dataA)-1][0]-12:
                     asLabel.pop(0)
                 else:
                     break
-            for i in range(len(apLabel) ):
+            for i in range(len(apLabel)-1):
                 if apLabel[i][0] < dataA[len(dataA)-1][0]-12:
                     apLabel.pop(0)
                 else:
@@ -694,13 +705,13 @@ def pulse(atrium, ventricle, window):
                 dataV.pop(0)
                 dataV.append([time, signal])
 
-            for i in range(len(vsLabel) ):
-                if vsLabel[i][0] < dataA[len(dataA)-1][0]-12:
+            for i in range(len(vsLabel)-1):
+                if vsLabel[i][0] < dataV[len(dataV)-1][0]-12:
                     vsLabel.pop(0)
                 else:
                     break
-            for i in range(len(vpLabel) ):
-                if vpLabel[i][0] < dataA[len(dataA)-1][0]-12:
+            for i in range(len(vpLabel)-1):
+                if vpLabel[i][0] < dataV[len(dataV)-1][0]-12:
                     vpLabel.pop(0)
                 else:
                     break
@@ -748,7 +759,7 @@ def changeMode(title):
         updateParam(17,2)
         updateParam(18,1)
         updateParam(19,2)
-    elif title[0:3] == "ROO":
+    elif title[0:3] == "DOO":
         updateParam(17,3)
         updateParam(18,1)
         updateParam(19,3)
