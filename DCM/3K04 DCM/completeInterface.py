@@ -325,7 +325,7 @@ def changeParameter(i, new_value, window, mode, title, label):
         user_list[user_id].AAI[i].append(new_value.get())
 
         info = readFile("pacemakerAAI.txt")
-        info[user_id][i].append(int(user_list[user_id].AAI[i][-1]))
+        info[user_id][i].append(float(user_list[user_id].AAI[i][-1]))
         changeParamWriteFile("pacemakerAAI.txt", info)
 
         dataValuesAAI2(window, title, "no")
@@ -334,7 +334,7 @@ def changeParameter(i, new_value, window, mode, title, label):
         user_list[user_id].VVI[i].append(new_value.get())
 
         info = readFile("pacemakerVVI.txt")
-        info[user_id][i].append(int(user_list[user_id].VVI[i][-1]))
+        info[user_id][i].append(float(user_list[user_id].VVI[i][-1]))
         changeParamWriteFile("pacemakerVVI.txt", info)
 
         dataValuesVVI2(window, title, "no")
@@ -412,7 +412,7 @@ def changeParameter(i, new_value, window, mode, title, label):
 def checkParameter(min, max, i, new_value, window, x_in, y_in, mode, title, label, paramNumber):
     global close
     try:
-        if (mode == "ROO" and i == 1) or (mode == "VVI" and i == 0) or (mode == "AAI" and i == 0) or (mode == "AOO" and i == 0) or (mode == "VOO" and i == 0):
+        if (mode == "ROO" and i == 1) or (mode == "VVI" and i == 0) or (mode == "AAI" and i == 0) or (mode == "VVI" and i == 0) or (mode == "AOO" and i == 0) or (mode == "VOO" and i == 0):
             if (float(new_value.get()) > max or float(new_value.get()) < min):
                 invalidEntry = tk.Label(window, text = "Out of Range",bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x = x_in + 320, y = y_in)
             else:
@@ -988,7 +988,7 @@ def dataValuesAAI2(oldWin, title, delCom):
     A_sensEntry = tk.Entry(AAIWindow, font=("Comic Sans MS", 20))
     A_sensEntry.place(x = 50, y = 675, width = 500, height = 50)
 
-    A_sensEntryChangeButton_2 = tk.Button(AAIWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(3, 5, 0, A_sensEntry, AAIWindow, 50, 635, "AAI", title, A_sensLabel,8))
+    A_sensEntryChangeButton_2 = tk.Button(AAIWindow, text = "Change", font = ("Comic Sans MS", 15), command = lambda:checkParameter(3, 5, 0, A_sensEntry, AAIWindow, 50, 750, "AAI", title, A_sensLabel,8))
     A_sensEntryChangeButton_2.place(x = 50, y = 750, width = 300, height = 50)
 
     # goes to previous window
@@ -1438,5 +1438,4 @@ def main():
     root.mainloop()
 
 main() # runs program
-
 # %%
