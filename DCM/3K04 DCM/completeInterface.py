@@ -606,7 +606,7 @@ def graph(window):
     dualGraphButton = tk.Button(window, text="Display Both Graphs", font=("Comic Sans MS", 15),command = lambda:dualGraph(window))
     dualGraphButton.place(x = 830, y = 525, width = 300, height = 50)
 
-    quitButton = tk.Button(window, text="Quit", font=("Comic Sans MS", 15), command = lambda:deactivate())
+    quitButton = tk.Button(window, text="Quit Graph", font=("Comic Sans MS", 15), command = lambda:deactivate())
     quitButton.place(x = 830, y = 625, width = 300, height = 50)
 
 def pulse(atrium, ventricle, window):
