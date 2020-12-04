@@ -983,7 +983,7 @@ def dataValuesAAI2(oldWin, title, delCom):
 
     # ASensitivity
     A_sensLabel = tk.Label(AAIWindow, text = "Atrial Sensitivity: " + str(user_list[user_id].AAI[0][-1]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=600)
-    A_sensLabel =  tk.Label(AAIWindow, text = "(Range: 3 - 5 V)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=635)
+    A_sensLabel =  tk.Label(AAIWindow, text = "(Range: 3.0 - 5.0 V)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=635)
 
     A_sensEntry = tk.Entry(AAIWindow, font=("Comic Sans MS", 20))
     A_sensEntry.place(x = 50, y = 675, width = 500, height = 50)
@@ -1055,7 +1055,7 @@ def dataValuesVVI2(oldWin, title, delCom):
 
     # VSensitivity
     V_sensLabel = tk.Label(VVIWindow, text = "Ventricle Sensitivity: " + str(user_list[user_id].VVI[0][-1]), bg='#FFB6C1',font = ("Comic Sans MS", 20)).place(x=50,y=600)
-    V_sensLabel =  tk.Label(VVIWindow, text = "(Range: 3-5 V)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=635)
+    V_sensLabel =  tk.Label(VVIWindow, text = "(Range: 3.0-5.0 V)", bg='#FFB6C1',font = ("Comic Sans MS", 12)).place(x=50,y=635)
 
     V_sensEntry = tk.Entry(VVIWindow, font=("Comic Sans MS", 20))
     V_sensEntry.place(x = 50, y = 675, width = 500, height = 50)
